@@ -1,0 +1,41 @@
+# PRAXIS Prototype — Ecosystem (ECH)
+
+This folder contains the **prototype implementation** of the PRAXIS Ecosystem Central Hub (ECH).
+It exists to prove feasibility and interaction flow — not to define canon.
+
+## Purpose (Prototype Goals)
+- Host the **Daemon Seat UI** inside ECH
+- Prove **connect / disconnect** of a reasoning model (LLM/SLM) through the daemon console
+- Prove **message round-trip** (send → receive) inside PRAXIS
+- Persist transcripts and events as **prototype artifacts/logs**
+- Prepare the surface for later experiments (UI capture, visual twin), without implementing them yet
+
+## Boundaries (What This Prototype Must NOT Do)
+- No direct UI control from the daemon console
+- No execution authority in ECH
+- No “smart” automation loops
+- No canonical definitions (those belong in `praxis-canonical`)
+
+## Source of Truth
+Canonical architecture, terminology, and contracts live in:
+- `praxis-canonical` (GitHub)
+
+This folder implements and tests against canon; it does not redefine it.
+
+## Current Status
+- [ ] Daemon Seat UI scaffold
+- [ ] Mock adapter connect/disconnect
+- [ ] Real model adapter connect/disconnect
+- [ ] Transcript + event logging
+
+## How to Work Here (Workflow)
+- Use `experiment/*` branches for spikes
+- Merge to `main` only when the prototype remains usable
+- If a finding changes architecture or terms, write an ADR or update the glossary in `praxis-canonical`
+
+## Next Step
+Implement the **Daemon Seat Console** inside ECH with:
+- Provider dropdown
+- Connect/Disconnect state machine
+- Chat panel + input
+- Trace/event strip
