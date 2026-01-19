@@ -1,0 +1,4706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="PRAXIS Icon.ico" />
+  <meta charset="UTF-8" />
+  <title>PRAXIS Ecosystem Central Hub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1b2533, #020613 55%);
+      color: #f5f7fb;
+      overflow: hidden;
+    }
+
+
+    /* Top menu bar */
+    #menubar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      background: rgba(3, 6, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      z-index: 11;
+      font-size: 12px;
+    }
+
+    #menubar-left,
+    #menubar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .menu-app-label {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .menu-item-btn {
+      border: none;
+      background: transparent;
+      color: #e2e6ff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    .menu-item-btn:hover {
+      background: rgba(148, 186, 255, 0.16);
+      opacity: 1;
+    }
+
+    .menu-dropdown {
+      position: fixed;
+      top: 24px;
+      left: 10px;
+      min-width: 140px;
+      background: #050812;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+      padding: 4px 0;
+      font-size: 12px;
+      z-index: 20;
+    }
+
+    .menu-dropdown .menu-item {
+      padding: 6px 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .menu-dropdown .menu-item:hover {
+      background: rgba(148, 186, 255, 0.16);
+    }
+
+
+    /* Top toolbar */
+
+    #toolbar {
+      position: fixed;
+      top: 24px;
+      left: 0;
+      right: 0;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      background: rgba(5, 10, 25, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      font-size: 13px;
+    }
+
+
+    #toolbar-logo {
+      height: 26px;
+      width: 26px;
+      border-radius: 999px;
+      object-fit: cover;
+      margin-right: 6px;
+      box-shadow:
+        0 0 10px rgba(124, 211, 255, 0.9),
+        0 0 0 1px rgba(148, 186, 255, 0.6);
+    }
+
+    #toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    #toolbar-left .label {
+      font-weight: 600;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    #toolbar-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-btn,
+    .icon-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      background: rgba(7, 15, 35, 0.85);
+      color: #e2e6ff;
+      font-size: 11px;
+      padding: 3px 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tool-btn span.icon-circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid rgba(148, 186, 255, 0.85);
+    }
+
+    .tool-btn span.icon-circle.label {
+      background: rgba(108, 160, 255, 0.2);
+    }
+
+    .tool-btn span.icon-circle.descriptor {
+      border-color: rgba(167, 211, 255, 0.9);
+      background: rgba(104, 193, 255, 0.15);
+    }
+
+    .tool-btn.connector::before {
+      content: "";
+      width: 14px;
+      height: 0;
+      border-top: 2px solid rgba(148, 186, 255, 0.9);
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(6, 16, 40, 0.8);
+    }
+
+    .tool-btn.active,
+    .icon-btn:hover {
+      background: linear-gradient(135deg, #7aa8ff, #a5bfff);
+      color: #050810;
+      border-color: transparent;
+    }
+
+    .icon-btn {
+      padding: 3px 7px;
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    /* Page title */
+
+    #page-title {
+      position: fixed;
+      top: 74px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      opacity: 0.9;
+      z-index: 9;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(3, 8, 22, 0.7);
+      border: 1px solid rgba(148, 186, 255, 0.3);
+      text-align: center;
+      min-width: 140px;
+    }
+
+    #page-title:focus {
+      outline: none;
+      border-color: rgba(191, 219, 255, 0.85);
+      background: rgba(3, 8, 22, 0.95);
+    }
+
+    /* Canvas */
+
+    #canvas {
+      position: fixed;
+      top: 104px;
+      left: 220px;
+      right: 0;
+      bottom: 0;
+      width: calc(100vw - 220px);
+      height: calc(100vh - 104px);
+      cursor: default;
+    }
+
+    .label-bubble {
+      cursor: grab;
+    }
+
+    .label-bubble.dragging {
+      cursor: grabbing;
+    }
+
+    .descriptor-bubble {
+      cursor: grab;
+    }
+
+    .bubble-text {
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .descriptor-text {
+      font-size: 10px;
+    }
+
+    .link-line {
+      stroke: #a7d3ff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      opacity: 0.9;
+    }
+
+    .link-line.selected {
+      stroke-width: 3;
+      stroke-dasharray: 4 3;
+      opacity: 1;
+    }
+
+    .temp-link {
+  stroke: #6ea4d9;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  opacity: 1;
+}
+
+    /* Context menu */
+
+    #context-menu {
+      position: fixed;
+      min-width: 200px;
+      background: #080d1c;
+      border-radius: 8px;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(148, 186, 255, 0.16);
+      padding: 4px 0;
+      font-size: 13px;
+      display: none;
+      z-index: 100;
+    }
+
+    #context-menu .menu-item {
+      padding: 6px 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    #context-menu .menu-item:hover {
+      background: rgba(148, 186, 255, 0.16);
+    }
+
+    #context-menu .menu-separator {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 4px 0;
+    }
+
+    /* Edit modal */
+
+    #edit-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    #edit-modal {
+      background: #050918;
+      border-radius: 12px;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(148, 186, 255, 0.22);
+      padding: 16px 18px 14px;
+      width: 360px;
+    }
+
+    #edit-modal h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    #edit-modal label {
+      display: block;
+      font-size: 12px;
+      opacity: 0.84;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    #edit-title,
+    #edit-description {
+      width: 100%;
+      border-radius: 7px;
+      border: 1px solid rgba(148, 186, 255, 0.4);
+      background: #050916;
+      color: #f5f7fb;
+      padding: 5px 7px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      max-height: 140px;
+    }
+
+    #edit-description {
+      min-height: 60px;
+    }
+
+    #edit-colors {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    #edit-colors div {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #edit-colors input[type="color"] {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: transparent;
+    }
+
+    #edit-modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn.cancel {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.14);
+      color: #e0e3ff;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #7aa8ff, #a5bfff);
+      color: #050810;
+      font-weight: 600;
+    }
+
+    .btn.cancel:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn.primary:hover {
+      filter: brightness(1.05);
+    }
+
+    .desc-preview {
+      font-size: 10px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+
+    /* Left side panel - Agent Daemon Port */
+
+    #left-panel {
+      position: fixed;
+      top: 68px;
+      left: 0;
+      bottom: 0;
+      width: 220px;
+      background: rgba(5, 10, 25, 0.97);
+      border-right: 1px solid rgba(148, 186, 255, 0.24);
+      box-shadow:
+        10px 0 30px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(148, 186, 255, 0.1);
+      padding: 8px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 12;
+    }
+
+    #left-panel-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    #left-panel-body {
+      font-size: 11px;
+      opacity: 0.85;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .agent-port-block {
+      border-radius: 9px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      background: radial-gradient(circle at 0% 0%, rgba(122, 168, 255, 0.35), transparent 55%),
+                  rgba(8, 13, 32, 0.96);
+      padding: 8px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .agent-port-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .agent-port-label {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .agent-port-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      font-size: 10px;
+    }
+
+    .agent-port-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #f97373;
+      box-shadow: 0 0 6px rgba(248, 113, 113, 0.85);
+    }
+
+    .agent-port-status-text {
+      opacity: 0.8;
+    }
+
+    #agent-port-link-btn {
+      align-self: flex-start;
+      margin-top: 2px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.6);
+      background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+      color: #f9fafb;
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    }
+
+    #agent-port-link-btn:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.75);
+    }
+
+    #agent-port-link-btn span.icon {
+      font-size: 12px;
+    }
+
+    .agent-port-note {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+
+    /* Right side panel */
+
+    #side-panel {
+      position: fixed;
+      top: 68px;
+      right: 0;
+      bottom: 0;
+      width: 296px; /* inner panel (260) + rail (24) */
+      display: flex;
+      flex-direction: row-reverse;
+      z-index: 12;
+      pointer-events: none;
+      transform: translateX(0);
+      transition: transform 0.2s ease-out;
+    }
+
+    #side-panel-inner {
+      height: 100%;
+      width: 260px;
+      background: rgba(5, 10, 25, 0.97);
+      border-left: 1px solid rgba(148, 186, 255, 0.24);
+      box-shadow:
+        -10px 0 30px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(148, 186, 255, 0.1);
+      padding: 8px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: auto;
+    }
+
+    #side-panel.collapsed {
+      transform: translateX(calc(100% - 36px)); /* leave the rail visible */
+    }
+
+    #side-panel-rail {
+      width: 36px;
+      height: 100%;
+      background: radial-gradient(circle at 30% 0%, rgba(122, 168, 255, 0.24), transparent 55%),
+                  rgba(3, 7, 20, 0.98);
+      border-left: 1px solid rgba(148, 186, 255, 0.5);
+      box-shadow:
+        -4px 0 18px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(148, 186, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    #side-panel-toggle {
+  width: 30px;
+  height: 100%;
+  border-radius: 0;
+  background: linear-gradient(180deg, #1b2945, #0b1120);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  color: #e2e6ff;
+}
+
+    #side-panel-toggle:hover {
+      background: radial-gradient(circle at 20% 0%, rgba(226, 232, 255, 0.8), transparent 60%),
+                  linear-gradient(180deg, #4b6fcf, #1e3a8a);
+      color: #050810;
+      transform: translateX(-1px);
+    }
+
+
+    /* Side rail chevron: single glyph, rotated for expand/collapse */
+    #side-panel-toggle .chev{
+      display: inline-block;
+      transition: transform 0.18s ease-out;
+      transform: rotate(0deg);
+      line-height: 1;
+    }
+    #side-panel.collapsed #side-panel-toggle .chev{
+      transform: rotate(180deg);
+    }
+
+    .side-header {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .side-label {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-top: 4px;
+      margin-bottom: 1px;
+    }
+
+    .side-value {
+      font-size: 12px;
+      padding: 2px 0 4px;
+    }
+
+    #side-empty {
+      font-size: 12px;
+      opacity: 0.7;
+      padding-top: 6px;
+    }
+
+    #side-content {
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 12px;
+    }
+
+    #side-panel.has-selection #side-empty {
+      display: none;
+    }
+
+    #side-panel.has-selection #side-content {
+      display: flex;
+    }
+
+    #side-title,
+    #side-description {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      background: rgba(3, 6, 18, 0.95);
+      color: #f5f7fb;
+      padding: 4px 6px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    #side-description {
+      min-height: 60px;
+      resize: vertical;
+      max-height: 160px;
+    }
+
+    #side-color-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    #side-color-row div {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    #side-bubble-color,
+    #side-text-color {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: transparent;
+      appearance: none;
+    }
+
+    #side-attachments {
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 4px;
+    }
+
+    #side-attachments-list {
+      margin-top: 4px;
+      max-height: 180px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .attachment-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      margin-bottom: 4px;
+      font-size: 11px;
+      background: rgba(6, 13, 28, 0.9);
+      border-radius: 6px;
+      padding: 3px 4px;
+      border: 1px solid rgba(148, 186, 255, 0.2);
+    }
+
+    .attachment-thumb {
+      width: 40px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      flex-shrink: 0;
+    }
+
+    .attachment-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .attachment-name {
+      font-size: 11px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .attachment-type {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .attachment-remove {
+      border: none;
+      background: transparent;
+      color: #ffb5b5;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0 4px;
+      line-height: 1;
+    }
+
+    .attachment-remove:hover {
+      color: #ff6b6b;
+    }
+
+    #side-attach-input {
+      display: none;
+    }
+
+    .file-upload-row {
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+    }
+
+    .file-upload-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.45);
+      background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+      color: #f5f7fb;
+      font-size: 11px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .file-upload-button:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    .file-upload-icon {
+      font-size: 13px;
+    }
+
+
+    #side-parents {
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 4px;
+    }
+
+    #side-parents-list {
+      margin-top: 4px;
+      max-height: 80px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    #side-children {
+      margin-top: 4px;
+      padding-top: 4px;
+    }
+
+    #side-children-list {
+      margin-top: 4px;
+      max-height: 140px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .side-divider {
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 4px;
+    }
+
+    .child-item {
+      font-size: 11px;
+      padding: 3px 5px;
+      border-radius: 5px;
+      background: rgba(6, 13, 28, 0.9);
+      border: 1px solid rgba(148, 186, 255, 0.18);
+      margin-bottom: 3px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .child-item span.child-type {
+      opacity: 0.7;
+      font-size: 10px;
+      margin-left: 6px;
+    }
+
+    .child-item:hover {
+      background: rgba(148, 186, 255, 0.18);
+      border-color: rgba(148, 186, 255, 0.5);
+    }
+
+    .side-small {
+      font-size: 10px;
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+  
+    /* --- Agent Daemon Console (ECH embedded) ---------------------------- */
+
+    #daemon-console {
+      position: fixed;
+      left: 232px; /* just to the right of left panel */
+      bottom: 14px;
+      width: 420px;
+      max-width: calc(100vw - 260px);
+      height: 280px;
+      background: radial-gradient(circle at 0% 0%, rgba(122, 168, 255, 0.22), transparent 55%),
+                  rgba(5, 10, 25, 0.96);
+      border: 1px solid rgba(148, 186, 255, 0.28);
+      border-radius: 14px;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(15, 23, 42, 0.75);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+
+    #daemon-console.minimized {
+      height: 40px;
+      width: 232px;
+    }
+
+    #daemon-console * {
+      user-select: text; /* override global user-select:none */
+    }
+
+    #daemon-console-header {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      background: rgba(3, 8, 22, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      user-select: none;
+    }
+
+    #daemon-console-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.92;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .daemon-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #f97373;
+      box-shadow: 0 0 6px rgba(248, 113, 113, 0.85);
+      flex-shrink: 0;
+    }
+    .daemon-dot.linked {
+      background: #34d399;
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.85);
+    }
+
+    #daemon-console-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .daemon-hdr-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      background: rgba(7, 15, 35, 0.85);
+      color: #e2e6ff;
+      font-size: 11px;
+      padding: 3px 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .daemon-hdr-btn:hover {
+      background: rgba(148, 186, 255, 0.16);
+    }
+
+    #daemon-console-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 10px 8px;
+      overflow: hidden;
+    }
+
+    #daemon-messages {
+      flex: 1;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .daemon-msg {
+      margin: 0 0 8px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .daemon-msg-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      opacity: 0.72;
+      user-select: none;
+    }
+
+    .daemon-msg-role {
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.25);
+      background: rgba(15, 23, 42, 0.85);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      user-select: none;
+    }
+    .daemon-msg-role.user { border-color: rgba(167, 211, 255, 0.35); }
+    .daemon-msg-role.daemon { border-color: rgba(52, 211, 153, 0.35); }
+    .daemon-msg-role.system { border-color: rgba(250, 204, 21, 0.35); }
+
+    .daemon-msg-text {
+      font-size: 12px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(6, 13, 28, 0.82);
+      border: 1px solid rgba(148, 186, 255, 0.18);
+      border-radius: 10px;
+      padding: 8px 9px;
+    }
+
+    #daemon-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      user-select: none;
+    }
+
+    #daemon-input {
+      flex: 1;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.35);
+      background: rgba(3, 6, 18, 0.92);
+      color: #f5f7fb;
+      padding: 0 12px;
+      font-size: 12px;
+      outline: none;
+      user-select: text;
+    }
+
+    #daemon-send {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 186, 255, 0.6);
+      background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+      color: #f5f7fb;
+      font-size: 11px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    #daemon-send:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    #daemon-console.minimized #daemon-console-body {
+      display: none;
+    }
+
+    /* Console minimized: hide Clear and improve header action spacing */
+    #daemon-console.minimized #daemon-clear{
+      display: none;
+    }
+    /* give the pill a bit more breathing room when collapsed */
+    #daemon-console.minimized #daemon-console-header{
+      padding-left: 14px;
+      padding-right: 14px; /* ensure the button never clips */
+    }
+    /* In collapsed mode, constrain title so actions always fit */
+    #daemon-console.minimized #daemon-console-title{
+      max-width: calc(100% - 44px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #daemon-console.minimized #daemon-console-subtitle{
+      display: none; /* keep the pill clean when collapsed */
+    }
+    /* single action button shouldn't feel crammed */
+    #daemon-console.minimized #daemon-console-actions{
+      gap: 0;
+      flex-shrink: 0;
+    }
+    #daemon-console.minimized #daemon-minimize{
+      margin-left: 0; /* avoid pushing into the edge */
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="menubar">
+    <div id="menubar-left">
+      <span class="menu-app-label">PRAXIS</span>
+      <button class="menu-item-btn" id="menu-file-button">File ▾</button>
+      <button class="menu-item-btn" id="menu-edit-button">Edit ▾</button>
+      <button class="menu-item-btn">View</button>
+      <button class="menu-item-btn">Help</button>
+    </div>
+    <div id="menubar-right">
+      <span style="font-size:11px;opacity:0.8;">Ecosystem Central Hub</span>
+    </div>
+  </div>
+
+  <div id="file-menu" class="menu-dropdown" style="display:none;">
+    <div class="menu-item" data-file-action="save">Save</div>
+    <div class="menu-item" data-file-action="save-as">Save As…</div>
+    <div class="menu-item" data-file-action="open">Open…</div>
+  </div>
+
+  <div id="edit-menu" class="menu-dropdown" style="display:none;">
+    <div class="menu-item" data-edit-action="undo">Undo (Ctrl+Z)</div>
+    <div class="menu-item" data-edit-action="redo">Redo (Ctrl+Y)</div>
+  </div>
+
+  <div id="toolbar">
+    <div id="toolbar-left">
+      <img id="toolbar-logo" src="PRAXIS Logo.png" alt="PRAXIS Logo" />
+      <span class="label">PRAXIS Ecosystem Central Hub</span>
+    </div>
+    <div id="toolbar-center">
+      <button class="tool-btn" id="tool-label" title="Add module bubble">
+        <span class="icon-circle label"></span>
+        Module
+      </button>
+      <button class="tool-btn" id="tool-descriptor" title="Add task bubble">
+        <span class="icon-circle descriptor"></span>
+        Task
+      </button>
+      <button class="tool-btn connector" id="tool-connector" title="Connector mode">
+        Link
+      </button>
+      <button class="tool-btn" id="tool-color" title="Change selected bubble color">
+        <span style="width:10px;height:10px;border-radius:50%;border:2px solid rgba(148,186,255,0.95);box-shadow:0 0 5px rgba(148,186,255,0.95);"></span>
+        Color
+      </button>
+    </div>
+    <div id="toolbar-right">
+      <button class="icon-btn" id="btn-undo" title="Undo (Ctrl+Z)">⟲</button>
+      <button class="icon-btn" id="btn-redo" title="Redo (Ctrl+Y / Ctrl+Shift+Z)">⟳</button>
+      <button class="icon-btn" id="btn-save" title="Save">💾</button>
+      <button class="icon-btn" id="btn-save-as" title="Save As">💾…</button>
+      <button class="icon-btn" id="btn-open" title="Open ecosystem">📂</button>
+</div>
+  </div>
+
+  <input type="color" id="toolbar-color-picker"
+         style="position:absolute;opacity:0;width:0;height:0;border:0;padding:0;margin:0;" />
+
+  <input type="file" id="file-load-input" accept="application/json" style="display:none" />
+
+  <div id="left-panel">
+    <div id="left-panel-header">Agent Daemon Port</div>
+    <div id="left-panel-body">
+      <div class="agent-port-block">
+        <div class="agent-port-row">
+          <div class="agent-port-label">Link Status</div>
+          <div class="agent-port-status-pill">
+            <div class="agent-port-indicator" id="agent-port-indicator"></div>
+            <div class="agent-port-status-text" id="agent-port-status-text">Not linked</div>
+          </div>
+        </div>
+        <button id="agent-port-link-btn" type="button">
+          <span class="icon">⧉</span>
+          <span>Link Agent Daemon…</span>
+        </button>
+        <div class="agent-port-note">
+          Reserved port for attaching the PRAXIS Agent Daemon to this hub.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-title" contenteditable="true">PRAXIS Environment Map</div>
+
+  <svg id="canvas"></svg>
+
+  <!-- Right side panel -->
+  <div id="side-panel" class="collapsed">
+    <div id="side-panel-inner">
+      <div class="side-header">Selected Object</div>
+      <div id="side-empty">Click a bubble to view and edit its details here.</div>
+      <div id="side-content">
+        <div class="side-label">Type</div>
+        <div class="side-value" id="side-type"></div>
+
+        <div class="side-label">Title</div>
+        <input id="side-title" />
+
+        <div class="side-label">Description</div>
+        <textarea id="side-description"></textarea>
+
+        <div class="side-label">Colors</div>
+        <div id="side-color-row">
+          <div>
+            <span>Bubble</span>
+            <input type="color" id="side-bubble-color" />
+          </div>
+          <div>
+            <span>Text</span>
+            <input type="color" id="side-text-color" />
+          </div>
+        </div>
+
+        <div id="side-parents">
+          <div class="side-label">Parent Bubbles</div>
+          <div id="side-parents-list"></div>
+        </div>
+
+        <div id="side-children">
+          <div class="side-label side-divider">Child Bubbles</div>
+          <button id="side-add-task" class="file-upload-button" style="margin-top:4px;margin-bottom:4px;padding:3px 8px;font-size:10px;">+ Add Task</button>
+          <div id="side-children-list"></div>
+        </div>
+
+        <div id="side-io">
+          <div class="side-label side-divider">Inputs</div>
+          <div id="side-inputs-list"></div>
+          <div class="side-label side-divider" style="margin-top:4px;">Outputs</div>
+          <div id="side-outputs-list"></div>
+        </div>
+
+        <div id="side-attachments">
+          <div class="side-label">Attachments</div>
+          <div class="file-upload-row">
+            <label for="side-attach-input" class="file-upload-button">
+              <span class="file-upload-icon">📎</span>
+              <span>Add attachments…</span>
+            </label>
+            <input id="side-attach-input" type="file" multiple />
+          </div>
+          <div class="side-small">Attached files/images will preview here but not on the bubbles themselves.</div>
+          <div id="side-attachments-list"></div>
+        </div>
+      </div>
+    </div>
+    <div id="side-panel-rail">
+      <button id="side-panel-toggle" aria-label="Toggle side panel"><span class="chev">❯</span></button>
+    </div>
+  </div>
+
+
+  <!-- Agent Daemon Console -->
+  <div id="daemon-console" class="minimized" aria-label="Agent Daemon Console">
+    <div id="daemon-console-header">
+      <div id="daemon-console-title">
+        <span class="daemon-dot" id="daemon-console-dot"></span>
+        <span>Daemon Console</span>
+        <span style="opacity:0.65;font-weight:500;letter-spacing:0.02em;text-transform:none;" id="daemon-console-subtitle">offline</span>
+      </div>
+      <div id="daemon-console-actions">
+        <button class="daemon-hdr-btn" id="daemon-clear" title="Clear console">Clear</button>
+        <button class="daemon-hdr-btn" id="daemon-minimize" title="Minimize / Restore">▾</button>
+      </div>
+    </div>
+    <div id="daemon-console-body">
+      <div id="daemon-messages"></div>
+      <div id="daemon-input-row">
+        <input id="daemon-input" type="text" placeholder="Message the daemon… (Enter to send)" />
+        <button id="daemon-send" type="button">Send</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="context-menu"></div>
+
+  <div id="edit-modal-backdrop">
+    <div id="edit-modal">
+      <h2>Edit Bubble</h2>
+      <label for="edit-title">Title</label>
+      <input id="edit-title" />
+      <label for="edit-description">Description</label>
+      <textarea id="edit-description"></textarea>
+
+      <div id="edit-colors">
+        <div>
+          <span>Bubble</span>
+          <input type="color" id="edit-bubble-color" />
+        </div>
+        <div>
+          <span>Text</span>
+          <input type="color" id="edit-text-color" />
+        </div>
+      </div>
+
+      <div id="edit-modal-buttons">
+        <button class="btn cancel" id="edit-cancel">Cancel</button>
+        <button class="btn primary" id="edit-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const svg = document.getElementById("canvas");
+    const contextMenu = document.getElementById("context-menu");
+    const modalBackdrop = document.getElementById("edit-modal-backdrop");
+    const editTitleInput = document.getElementById("edit-title");
+    const editDescInput = document.getElementById("edit-description");
+    const editBubbleColor = document.getElementById("edit-bubble-color");
+    const editTextColor = document.getElementById("edit-text-color");
+    const editCancelBtn = document.getElementById("edit-cancel");
+    const editSaveBtn = document.getElementById("edit-save");
+
+    const toolLabelBtn = document.getElementById("tool-label");
+    const toolDescriptorBtn = document.getElementById("tool-descriptor");
+    const toolConnectorBtn = document.getElementById("tool-connector");
+    const toolColorBtn = document.getElementById("tool-color");
+    const toolbarColorPicker = document.getElementById("toolbar-color-picker");
+    const btnUndo = document.getElementById("btn-undo");
+    const btnRedo = document.getElementById("btn-redo");
+    const btnLoad = document.getElementById("btn-open");
+    const btnSave = document.getElementById("btn-save");
+    const btnSaveAs = document.getElementById("btn-save-as");
+    const pageTitleEl = document.getElementById("page-title");
+    const fileLoadInput = document.getElementById("file-load-input");
+    const agentPortLinkBtn = document.getElementById("agent-port-link-btn");
+
+    const fileMenuButton = document.getElementById("menu-file-button");
+    const fileMenu = document.getElementById("file-menu");
+    let fileMenuOpen = false;
+    const editMenuButton = document.getElementById("menu-edit-button");
+    const editMenu = document.getElementById("edit-menu");
+    let editMenuOpen = false;
+
+    function hideFileMenu() {
+      if (fileMenuOpen) {
+        fileMenu.style.display = "none";
+        fileMenuOpen = false;
+      }
+    }
+
+    function showFileMenu() {
+      const rect = fileMenuButton.getBoundingClientRect();
+      fileMenu.style.left = rect.left + "px";
+      fileMenu.style.top = rect.bottom + "px";
+      fileMenu.style.display = "block";
+      fileMenuOpen = true;
+    }
+
+    function hideEditMenu() {
+      if (editMenuOpen) {
+        editMenu.style.display = "none";
+        editMenuOpen = false;
+      }
+    }
+
+    function showEditMenu() {
+      const rect = editMenuButton.getBoundingClientRect();
+      editMenu.style.left = rect.left + "px";
+      editMenu.style.top = rect.bottom + "px";
+      editMenu.style.display = "block";
+      editMenuOpen = true;
+    }
+
+
+    fileMenuButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (fileMenuOpen) {
+        hideFileMenu();
+      } else {
+        hideEditMenu();
+        showFileMenu();
+      }
+    });
+
+    fileMenu.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const item = e.target.closest(".menu-item");
+      if (!item) return;
+      const action = item.dataset.fileAction;
+      hideFileMenu();
+      if (action === "save") {
+        saveProject(false);
+      } else if (action === "save-as") {
+        saveProject(true);
+      } else if (action === "open") {
+        openProject();
+      }
+    });
+
+    editMenuButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (editMenuOpen) {
+        hideEditMenu();
+      } else {
+        hideFileMenu();
+        showEditMenu();
+      }
+    });
+
+    editMenu.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const item = e.target.closest(".menu-item");
+      if (!item) return;
+      const action = item.dataset.editAction;
+      hideEditMenu();
+      if (action === "undo") {
+        undo();
+      } else if (action === "redo") {
+        redo();
+      }
+    });
+
+    window.addEventListener("click", () => {
+      hideFileMenu();
+      hideEditMenu();
+    });
+
+
+    
+    // --- Agent Daemon client (WebSocket over localhost) -------------------
+    const agentPortIndicator = document.getElementById("agent-port-indicator");
+    const agentPortStatusText = document.getElementById("agent-port-status-text");
+
+    const daemonConsole = document.getElementById("daemon-console");
+    const daemonConsoleDot = document.getElementById("daemon-console-dot");
+    const daemonConsoleSubtitle = document.getElementById("daemon-console-subtitle");
+    const daemonMessagesEl = document.getElementById("daemon-messages");
+    const daemonInput = document.getElementById("daemon-input");
+    const daemonSendBtn = document.getElementById("daemon-send");
+    const daemonClearBtn = document.getElementById("daemon-clear");
+    const daemonMinBtn = document.getElementById("daemon-minimize");
+
+    // Default daemon endpoint (matches PRAXIS.AgentDaemon.cs)
+    const DAEMON_WS_URL = "ws://127.0.0.1:8787/ws";
+
+    const daemonState = {
+      ws: null,
+      linked: false,
+      connecting: false,
+      lastError: null
+    };
+
+    function nowStamp() {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mm = String(d.getMinutes()).padStart(2, "0");
+      const ss = String(d.getSeconds()).padStart(2, "0");
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    function setLinkedUI(isLinked, subtitleText) {
+      daemonState.linked = isLinked;
+      if (agentPortIndicator) {
+        agentPortIndicator.style.background = isLinked ? "#34d399" : "#f97373";
+        agentPortIndicator.style.boxShadow = isLinked
+          ? "0 0 8px rgba(52, 211, 153, 0.85)"
+          : "0 0 6px rgba(248, 113, 113, 0.85)";
+      }
+      if (agentPortStatusText) {
+        agentPortStatusText.textContent = isLinked ? "Linked" : "Not linked";
+        agentPortStatusText.style.opacity = isLinked ? "0.95" : "0.8";
+      }
+
+      if (daemonConsoleDot) {
+        daemonConsoleDot.classList.toggle("linked", !!isLinked);
+      }
+      if (daemonConsoleSubtitle) {
+        daemonConsoleSubtitle.textContent = subtitleText || (isLinked ? "online" : "offline");
+      }
+
+      if (agentPortLinkBtn) {
+        agentPortLinkBtn.querySelector("span:last-child").textContent = isLinked ? "Unlink Agent Daemon…" : "Link Agent Daemon…";
+      }
+    }
+
+    function ensureConsoleExpanded() {
+      if (!daemonConsole) return;
+      if (daemonConsole.classList.contains("minimized")) {
+        daemonConsole.classList.remove("minimized");
+        if (daemonMinBtn) daemonMinBtn.textContent = "▾";
+      }
+    }
+
+    function addConsoleMessage(role, text) {
+      if (!daemonMessagesEl) return;
+
+      const msg = document.createElement("div");
+      msg.className = "daemon-msg";
+
+      const meta = document.createElement("div");
+      meta.className = "daemon-msg-meta";
+
+      const badge = document.createElement("span");
+      badge.className = "daemon-msg-role " + role;
+      badge.textContent =
+        role === "user" ? "YOU" :
+        role === "daemon" ? "DAEMON" : "SYSTEM";
+
+      const ts = document.createElement("span");
+      ts.textContent = nowStamp();
+
+      meta.appendChild(badge);
+      meta.appendChild(ts);
+
+      const body = document.createElement("div");
+      body.className = "daemon-msg-text";
+      body.textContent = text;
+
+      msg.appendChild(meta);
+      msg.appendChild(body);
+      daemonMessagesEl.appendChild(msg);
+
+      // Persist a short rolling history locally
+      try {
+        const key = "praxis_daemon_console_history_v1";
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        existing.push({ role, text, t: Date.now() });
+        while (existing.length > 250) existing.shift();
+        localStorage.setItem(key, JSON.stringify(existing));
+      } catch (_) { }
+
+      // Scroll to bottom
+      daemonMessagesEl.scrollTop = daemonMessagesEl.scrollHeight;
+    }
+
+    function loadConsoleHistory() {
+      try {
+        const key = "praxis_daemon_console_history_v1";
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        if (!Array.isArray(existing) || !existing.length) return;
+        existing.slice(-120).forEach(m => {
+          addConsoleMessage(m.role || "system", m.text || "");
+        });
+      } catch (_) { }
+    }
+
+    function clearConsole() {
+      if (!daemonMessagesEl) return;
+      daemonMessagesEl.innerHTML = "";
+      try {
+        localStorage.removeItem("praxis_daemon_console_history_v1");
+      } catch (_) { }
+      addConsoleMessage("system", "Console cleared.");
+    }
+
+    function daemonSend(text) {
+      const msg = (text || "").trim();
+      if (!msg) return;
+
+      ensureConsoleExpanded();
+      addConsoleMessage("user", msg);
+
+      if (!daemonState.ws || daemonState.ws.readyState !== WebSocket.OPEN) {
+        addConsoleMessage("system", "Not linked to daemon. Click “Link Agent Daemon…” first.");
+        return;
+      }
+
+      const payload = {
+        type: "chat",
+        id: Date.now().toString(36) + "_" + Math.random().toString(36).slice(2),
+        ts: Date.now(),
+        from: "ech",
+        text: msg
+      };
+
+      try {
+        daemonState.ws.send(JSON.stringify(payload));
+      } catch (err) {
+        addConsoleMessage("system", "Send failed: " + (err && err.message ? err.message : String(err)));
+      }
+    }
+
+    function daemonConnect() {
+      if (daemonState.connecting) return;
+      if (daemonState.ws && (daemonState.ws.readyState === WebSocket.OPEN || daemonState.ws.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
+      daemonState.connecting = true;
+      setLinkedUI(false, "connecting…");
+      ensureConsoleExpanded();
+      addConsoleMessage("system", "Linking to Agent Daemon at " + DAEMON_WS_URL + " …");
+
+      let ws;
+      try {
+        ws = new WebSocket(DAEMON_WS_URL);
+      } catch (err) {
+        daemonState.connecting = false;
+        setLinkedUI(false, "offline");
+        addConsoleMessage("system", "WebSocket creation failed: " + (err && err.message ? err.message : String(err)));
+        return;
+      }
+
+      daemonState.ws = ws;
+
+      ws.onopen = () => {
+        daemonState.connecting = false;
+        setLinkedUI(true, "online");
+        addConsoleMessage("system", "Linked. Say “/help” for daemon commands.");
+
+        // Handshake
+        const hello = {
+          type: "hello",
+          ts: Date.now(),
+          from: "ech",
+          client: {
+            name: "ECH",
+            version: "V45",
+            ua: navigator.userAgent
+          }
+        };
+        try { ws.send(JSON.stringify(hello)); } catch (_) { }
+      };
+
+      ws.onmessage = (ev) => {
+        let data = null;
+        try {
+          data = JSON.parse(ev.data);
+        } catch (_) {
+          // Allow plain text frames
+          addConsoleMessage("daemon", String(ev.data || ""));
+          return;
+        }
+
+        if (data && data.type === "audit") {
+          // optional, keep quiet unless verbose in future
+          return;
+        }
+
+        const text =
+          (data && (data.text || data.message)) != null
+            ? String(data.text || data.message)
+            : JSON.stringify(data);
+
+        addConsoleMessage("daemon", text);
+      };
+
+      ws.onerror = () => {
+        // browser provides little detail
+        daemonState.lastError = "socket error";
+      };
+
+      ws.onclose = () => {
+        daemonState.connecting = false;
+        setLinkedUI(false, "offline");
+        addConsoleMessage("system", "Daemon disconnected.");
+        daemonState.ws = null;
+      };
+    }
+
+    function daemonDisconnect() {
+      if (daemonState.ws) {
+        try { daemonState.ws.close(1000, "client disconnect"); } catch (_) { }
+      }
+      daemonState.ws = null;
+      daemonState.connecting = false;
+      setLinkedUI(false, "offline");
+    }
+
+    // Wire up UI
+    if (agentPortLinkBtn) {
+      agentPortLinkBtn.addEventListener("click", () => {
+        if (daemonState.linked) daemonDisconnect();
+        else daemonConnect();
+      });
+    }
+
+    if (daemonSendBtn) {
+      daemonSendBtn.addEventListener("click", () => daemonSend(daemonInput.value));
+    }
+    if (daemonInput) {
+      daemonInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          daemonSend(daemonInput.value);
+          daemonInput.value = "";
+        }
+      });
+    }
+
+    if (daemonClearBtn) {
+      daemonClearBtn.addEventListener("click", () => {
+        clearConsole();
+      });
+    }
+
+    function toggleDaemonConsoleMinimize(forceMinimized) {
+      if (!daemonConsole || !daemonMinBtn) return;
+      const shouldMin = (typeof forceMinimized === "boolean")
+        ? forceMinimized
+        : !daemonConsole.classList.contains("minimized");
+
+      if (shouldMin) daemonConsole.classList.add("minimized");
+      else daemonConsole.classList.remove("minimized");
+
+      daemonMinBtn.textContent = daemonConsole.classList.contains("minimized") ? "▸" : "▾";
+    }
+
+    if (daemonMinBtn && daemonConsole) {
+      daemonMinBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleDaemonConsoleMinimize();
+      });
+
+      // Make restore reliable: clicking the minimized header restores the console.
+      const hdr = document.getElementById("daemon-console-header");
+      if (hdr) {
+        hdr.addEventListener("click", (e) => {
+          if (daemonConsole.classList.contains("minimized")) {
+            e.stopPropagation();
+            toggleDaemonConsoleMinimize(false);
+          }
+        });
+      }
+    }
+
+    // Load prior console history
+    loadConsoleHistory();
+
+    // Initial status
+    setLinkedUI(false, "offline");
+
+
+
+    // Side panel elements
+    const sidePanel = document.getElementById("side-panel");
+    const sidePanelInner = document.getElementById("side-panel-inner");
+    const sidePanelToggle = document.getElementById("side-panel-toggle");
+    const sideType = document.getElementById("side-type");
+    const sideTitle = document.getElementById("side-title");
+    const sideDescription = document.getElementById("side-description");
+    const sideBubbleColor = document.getElementById("side-bubble-color");
+    const sideTextColor = document.getElementById("side-text-color");
+    const sideAttachInput = document.getElementById("side-attach-input");
+    const sideAttachmentsList = document.getElementById("side-attachments-list");
+    const sideChildrenList = document.getElementById("side-children-list");
+    const sideParentsList = document.getElementById("side-parents-list");
+    const sideInputsList = document.getElementById("side-inputs-list");
+    const sideOutputsList = document.getElementById("side-outputs-list");
+    const sideAddTaskBtn = document.getElementById("side-add-task");
+
+    let sidePanelCollapsed = true;
+
+    const NS = "http://www.w3.org/2000/svg";
+
+    let viewport = document.createElementNS(NS, "g");
+    viewport.setAttribute("id", "viewport");
+    svg.appendChild(viewport);
+
+    let nodes = [];
+    let links = [];
+    let nextId = 1;
+
+    let draggingNode = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let dragMoved = false;
+    let dragLastX = 0;
+    let dragLastY = 0;
+
+    let contextTarget = null;
+    let contextPosition = { x: 0, y: 0 };
+    let contextTargetLinkIndex = null;
+
+    let editingNode = null;
+    let selectedLinkIndex = null;
+    let selectedNode = null;
+    let linkPulseOffset = 0; // used to animate directional pulses on links
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+
+    let panning = false;
+    let panLastX = 0;
+    let panLastY = 0;
+
+    let mouseWorld = { x: 0, y: 0 };
+    let mouseOverCanvas = false;
+
+    let lastMiddleClickTime = 0;
+
+    let currentTool = null; // 'label', 'descriptor', 'connector'
+    let isDrawingConnector = false;
+    let tempLink = null; // { fromId, toX, toY }
+
+    let projectTitle = "PRAXIS Environment Map";
+
+    let internalTaskLinksByParent = {};
+
+    let undoStack = [];
+    let redoStack = [];
+    let historyLock = false;
+    let isInitializing = true;
+    let lastSavedFilename = null;
+
+    function resizeSvg() {
+      svg.setAttribute("width", window.innerWidth);
+      svg.setAttribute("height", window.innerHeight - 104);
+    }
+    window.addEventListener("resize", resizeSvg);
+    resizeSvg();
+
+    function updateViewportTransform() {
+      viewport.setAttribute("transform", `translate(${panX},${panY}) scale(${scale})`);
+    }
+    updateViewportTransform();
+
+    function setTool(tool) {
+      currentTool = tool;
+      toolLabelBtn.classList.remove("active");
+      toolDescriptorBtn.classList.remove("active");
+      toolConnectorBtn.classList.remove("active");
+      if (tool === "label") toolLabelBtn.classList.add("active");
+      if (tool === "descriptor") toolDescriptorBtn.classList.add("active");
+      if (tool === "connector") toolConnectorBtn.classList.add("active");
+      if (tool !== "connector") {
+        isDrawingConnector = false;
+        tempLink = null;
+      }
+    }
+
+    toolLabelBtn.addEventListener("click", () => {
+      setTool(currentTool === "label" ? null : "label");
+    });
+    toolDescriptorBtn.addEventListener("click", () => {
+      setTool(currentTool === "descriptor" ? null : "descriptor");
+    });
+    toolConnectorBtn.addEventListener("click", () => {
+      setTool(currentTool === "connector" ? null : "connector");
+    });
+
+    pageTitleEl.addEventListener("input", () => {
+      const txt = pageTitleEl.textContent.trim();
+      projectTitle = txt || "Untitled Map";
+    });
+
+    // Side panel toggle
+    function updateSidePanelCollapsedState() {
+      if (sidePanelCollapsed) {
+        sidePanel.classList.add("collapsed");
+      } else {
+        sidePanel.classList.remove("collapsed");
+      }
+    }
+
+    sidePanelToggle.addEventListener("click", () => {
+      sidePanelCollapsed = !sidePanelCollapsed;
+      updateSidePanelCollapsedState();
+    });
+    updateSidePanelCollapsedState();
+
+    // --- History ---------------------------------------------------------
+
+    function snapshotState() {
+      return JSON.parse(
+        JSON.stringify({
+          nodes,
+          links,
+          projectTitle,
+          panX,
+          panY,
+          scale
+        })
+      );
+    }
+
+    function pushHistory() {
+      if (historyLock || isInitializing) return;
+      undoStack.push(snapshotState());
+      if (undoStack.length > 100) undoStack.shift();
+      redoStack = [];
+    }
+
+    function restoreState(state) {
+      historyLock = true;
+      nodes = state.nodes || [];
+      links = state.links || [];
+      projectTitle = state.projectTitle || "PRAXIS Environment Map";
+      panX = state.panX || 0;
+      panY = state.panY || 0;
+      scale = state.scale || 1;
+
+      pageTitleEl.textContent = projectTitle;
+      updateViewportTransform();
+      historyLock = false;
+      render();
+      updateSidePanel();
+    }
+
+    function undo() {
+      if (undoStack.length <= 1) return;
+      const current = undoStack.pop();
+      redoStack.push(current);
+      const prev = undoStack[undoStack.length - 1];
+      restoreState(prev);
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      const state = redoStack.pop();
+      undoStack.push(state);
+      restoreState(state);
+    }
+
+    btnUndo.addEventListener("click", undo);
+    btnRedo.addEventListener("click", redo);
+
+    function openProject() {
+      fileLoadInput.value = "";
+      fileLoadInput.click();
+    }
+
+    fileLoadInput.addEventListener("change", () => {
+      const file = fileLoadInput.files && fileLoadInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data || typeof data !== "object") {
+            alert("Invalid ecosystem file.");
+            return;
+          }
+          nodes = Array.isArray(data.nodes) ? data.nodes : [];
+          links = Array.isArray(data.links) ? data.links : [];
+          projectTitle = data.title || "PRAXIS Environment Map";
+          pageTitleEl.textContent = projectTitle;
+
+          // Reset view and history, then center on content.
+          panX = 0;
+          panY = 0;
+          scale = 1;
+          updateViewportTransform();
+
+          undoStack = [];
+          redoStack = [];
+          pushHistory();
+
+          render();
+          updateSidePanel();
+          zoomToFit();
+        } catch (err) {
+          console.error(err);
+          alert("Failed to load ecosystem file.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    btnLoad.addEventListener("click", () => openProject());
+
+    function saveProject(forceAskName) {
+      const data = {
+        version: 1,
+        title: projectTitle,
+        nodes,
+        links
+      };
+      let filename = lastSavedFilename || "praxis-project.json";
+      if (forceAskName || !lastSavedFilename) {
+        const input = prompt("Save project as:", filename);
+        if (!input) return;
+        filename = input.endsWith(".json") ? input : input + ".json";
+        lastSavedFilename = filename;
+      }
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    btnSave.addEventListener("click", () => saveProject(false));
+    btnSaveAs.addEventListener("click", () => saveProject(true));
+
+    // --- Color helpers & gradients ---------------------------------------
+
+    function hexToRgb(hex) {
+      hex = hex.replace("#", "");
+      if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+      }
+      const num = parseInt(hex, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    function rgbToHex(r, g, b) {
+      const toHex = v => {
+        const h = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+        return h.length === 1 ? "0" + h : h;
+      };
+      return "#" + toHex(r) + toHex(g) + toHex(b);
+    }
+
+    function tintColor(hex, factor) {
+      const { r, g, b } = hexToRgb(hex);
+      const lerp = (c, t) => c + (t - c) * Math.abs(factor - 1);
+      if (factor >= 1) {
+        return rgbToHex(lerp(r, 255), lerp(g, 255), lerp(b, 255));
+      } else {
+        return rgbToHex(lerp(r, 0), lerp(g, 0), lerp(b, 0));
+      }
+    }
+
+    function ensureDefs() {
+      let defs = svg.querySelector("defs");
+      if (!defs) {
+        defs = document.createElementNS(NS, "defs");
+        svg.appendChild(defs);
+      }
+      return defs;
+    }
+
+    function ensureGlowFilters() {
+      const defs = ensureDefs();
+      // Layered groups for z-order:
+      // bgLinkLayer  -> module-to-module link lines (behind parent/module bubbles)
+      // parentLayer  -> parent/module bubble shapes
+      // linkLayer    -> task-to-task link lines (above parent, below children)
+      // childLayer   -> child/task bubble shapes
+      // textLayer    -> all bubble text (labels & tasks)
+      // tempLayer    -> temporary connector preview line
+      const bgLinkLayer = document.createElementNS(NS, "g");
+      bgLinkLayer.setAttribute("id", "bg-link-layer");
+      viewport.appendChild(bgLinkLayer);
+
+      const parentLayer = document.createElementNS(NS, "g");
+      parentLayer.setAttribute("id", "parent-layer");
+      viewport.appendChild(parentLayer);
+
+      const linkLayer = document.createElementNS(NS, "g");
+      linkLayer.setAttribute("id", "link-layer");
+      viewport.appendChild(linkLayer);
+
+      const childLayer = document.createElementNS(NS, "g");
+      childLayer.setAttribute("id", "child-layer");
+      viewport.appendChild(childLayer);
+
+      const textLayer = document.createElementNS(NS, "g");
+      textLayer.setAttribute("id", "text-layer");
+      viewport.appendChild(textLayer);
+
+      const tempLayer = document.createElementNS(NS, "g");
+      tempLayer.setAttribute("id", "temp-layer");
+      viewport.appendChild(tempLayer);
+
+      if (!document.getElementById("bubbleGlow")) {
+        const filter = document.createElementNS(NS, "filter");
+        filter.setAttribute("id", "bubbleGlow");
+        filter.setAttribute("x", "-50%");
+        filter.setAttribute("y", "-50%");
+        filter.setAttribute("width", "200%");
+        filter.setAttribute("height", "200%");
+        filter.innerHTML = `
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+          <feColorMatrix in="blur" type="matrix"
+            values="0 0 0 0 0.65
+                    0 0 0 0 0.82
+                    0 0 0 0 1
+                    0 0 0 0.9 0" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        `;
+        defs.appendChild(filter);
+      }
+    }
+
+
+    function ensureArrowMarkers() {
+      const defs = ensureDefs();
+      // Layered groups for z-order:
+      // bgLinkLayer  -> module-to-module link lines (behind parent/module bubbles)
+      // parentLayer  -> parent/module bubble shapes
+      // linkLayer    -> task-to-task link lines (above parent, below children)
+      // childLayer   -> child/task bubble shapes
+      // textLayer    -> all bubble text (labels & tasks)
+      // tempLayer    -> temporary connector preview line
+      const bgLinkLayer = document.createElementNS(NS, "g");
+      bgLinkLayer.setAttribute("id", "bg-link-layer");
+      viewport.appendChild(bgLinkLayer);
+
+      const parentLayer = document.createElementNS(NS, "g");
+      parentLayer.setAttribute("id", "parent-layer");
+      viewport.appendChild(parentLayer);
+
+      const linkLayer = document.createElementNS(NS, "g");
+      linkLayer.setAttribute("id", "link-layer");
+      viewport.appendChild(linkLayer);
+
+      const childLayer = document.createElementNS(NS, "g");
+      childLayer.setAttribute("id", "child-layer");
+      viewport.appendChild(childLayer);
+
+      const textLayer = document.createElementNS(NS, "g");
+      textLayer.setAttribute("id", "text-layer");
+      viewport.appendChild(textLayer);
+
+      const tempLayer = document.createElementNS(NS, "g");
+      tempLayer.setAttribute("id", "temp-layer");
+      viewport.appendChild(tempLayer);
+
+      if (!document.getElementById("linkArrow")) {
+        const marker = document.createElementNS(NS, "marker");
+        marker.setAttribute("id", "linkArrow");
+        marker.setAttribute("viewBox", "0 0 10 10");
+        marker.setAttribute("refX", "8");
+        marker.setAttribute("refY", "5");
+        marker.setAttribute("markerWidth", "6");
+        marker.setAttribute("markerHeight", "6");
+        marker.setAttribute("orient", "auto");
+
+        const path = document.createElementNS(NS, "path");
+        path.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+        path.setAttribute("fill", "#a7d3ff");
+
+        marker.appendChild(path);
+        defs.appendChild(marker);
+      }
+    }
+
+    // --- Sizing helpers --------------------------------------------------
+
+    function baseLabelRadiusFromText(node) {
+      const title = (node.text || "Module").trim();
+      const desc = (node.description || "").trim();
+
+      const titleLen = title.length;
+      const descLine = desc.length > 0 ? Math.min(desc.length, 80) : 0;
+
+      const titleWidth = titleLen * 7;
+      const descWidth = descLine * 5;
+      const maxWidth = Math.max(titleWidth, descWidth);
+      let r = maxWidth * 0.5;
+
+      const minLabel = 90;
+      return Math.max(r, minLabel);
+    }
+
+        function getNodeTextRadius(node) {
+      if (node.type === "label") {
+        return baseLabelRadiusFromText(node);
+      } else if (node.type === "descriptor") {
+        return estimateDescriptorRadius(node);
+      }
+      return baseLabelRadiusFromText(node);
+    }
+
+
+function getDescriptorChildren(labelId) {
+      return nodes.filter(
+        n => n.type === "descriptor" && n.parentId === labelId
+      );
+    }
+
+    // Multi-ring descriptor layout
+    function computeDescriptorRings(parent) {
+      const children = getDescriptorChildren(parent.id);
+      const textRadius = getNodeTextRadius(parent);
+      if (!children.length) {
+        return { rings: [], effectiveChildR: 0, maxRingRadius: 0, textRadius };
+      }
+
+      let maxChildBase = 26;
+      for (const c of children) {
+        const br = c.baseR || 26;
+        if (br > maxChildBase) maxChildBase = br;
+      }
+
+      const effectiveChildR = maxChildBase;
+      const ringMarginFromText = 4;
+      const radialRingSpacing = 2 * effectiveChildR + 10;
+      const gapAlong = 6;
+
+      const rings = [];
+      let childIndex = 0;
+      const n = children.length;
+      let ringIndex = 0;
+      let maxRingRadius = 0;
+
+      while (childIndex < n) {
+        const ringRadius =
+          textRadius +
+          effectiveChildR +
+          ringMarginFromText +
+          ringIndex * radialRingSpacing;
+
+        const circumference = 2 * Math.PI * ringRadius;
+        const slotSize = 2 * effectiveChildR + gapAlong;
+        const capacity = Math.max(4, Math.floor(circumference / slotSize));
+
+        const ringChildren = [];
+        for (let k = 0; k < capacity && childIndex < n; k++, childIndex++) {
+          ringChildren.push(children[childIndex]);
+        }
+
+        rings.push({ radius: ringRadius, children: ringChildren });
+        if (ringRadius > maxRingRadius) maxRingRadius = ringRadius;
+        ringIndex++;
+      }
+
+      return { rings, effectiveChildR, maxRingRadius, textRadius };
+    }
+
+    function computeNodeBaseR(node) {
+      const layout = computeDescriptorRings(node);
+      const textRadius = layout.textRadius;
+
+      // If no child descriptors, just size from text.
+      if (!layout.rings.length) {
+        return textRadius;
+      }
+
+      // Child Bubbles get animated (breathing + hover) and can be
+      // ~15–20% larger than their base radius, so give them generous room.
+      const childScaleAllowance = 1.25;      // allow for growth
+      const extraPadding = 18;              // visual gap between child and module edge
+
+      // Ensure the module circle fully contains:
+      // - the furthest orbit ring
+      // - the (scaled) child radius
+      // - an extra visual padding
+      const baseFromRings =
+        layout.maxRingRadius +
+        layout.effectiveChildR * childScaleAllowance +
+        extraPadding;
+
+      return Math.max(baseFromRings, textRadius);
+    }
+
+
+    function estimateDescriptorRadius(node) {
+      const title = (node.text || "Task").trim();
+      const titleLen = title.length;
+      const w = titleLen * 6;
+      const base = 26;
+      return Math.max(base, w * 0.35);
+    }
+
+    function updateBubbleSize(node) {
+      if (node.type === "label") {
+        node.baseR = baseLabelRadiusFromText(node);
+      } else if (node.type === "descriptor") {
+        node.baseR = estimateDescriptorRadius(node);
+      }
+    }
+
+    // Word wrapping
+    function wrapTextLines(text, maxChars) {
+      const words = (text || "").split(/\s+/);
+      const lines = [];
+      let current = "";
+      for (const w of words) {
+        if (!w) continue;
+        if ((current + " " + w).trim().length > maxChars) {
+          if (current) lines.push(current.trim());
+          current = w;
+        } else {
+          current = (current + " " + w).trim();
+        }
+      }
+      if (current) lines.push(current.trim());
+      return lines.length ? lines : [""];
+    }
+
+    // --- Node helpers ----------------------------------------------------
+
+    function getLabelNodes() {
+      return nodes.filter(n => n.type === "label");
+    }
+
+    function getNodeById(id) {
+      return nodes.find(n => n.id === id);
+    }
+
+    function getRootModuleFor(node) {
+      if (!node) return null;
+      if (node.type === "label") return node;
+      let cur = node;
+      let guard = 0;
+      while (cur && cur.parentId != null && guard < 50) {
+        const p = getNodeById(cur.parentId);
+        if (!p) break;
+        if (p.type === "label") return p;
+        cur = p;
+        guard++;
+      }
+      return null;
+    }
+
+    function getNodeHitRadius(node) {
+      if (!node) return 0;
+      // Labels have explicit radius
+      if (typeof node.r === "number" && node.r > 0) return node.r;
+      if (typeof node.baseR === "number" && node.baseR > 0) return node.baseR;
+
+      // Descriptors (tasks) approximate a circular hit area based on their visual size
+      if (node.type === "descriptor") {
+        // These values should roughly match drawDescriptor's size behavior
+        const base = 26;
+        const scale = node.scale || 1;
+        return base * scale;
+      }
+
+      // Fallback
+      return 20;
+    }
+
+    function isAncestor(ancestorNode, maybeChild) {
+      if (!ancestorNode || !maybeChild) return false;
+      let cur = maybeChild;
+      let guard = 0;
+      while (cur && cur.parentId != null && guard < 100) {
+        const p = getNodeById(cur.parentId);
+        if (!p) break;
+        if (p.id === ancestorNode.id) return true;
+        cur = p;
+        guard++;
+      }
+      return false;
+    }
+
+    function areAncestorDescendant(a, b) {
+      return isAncestor(a, b) || isAncestor(b, a);
+    }
+
+    function ensureAttachmentsArray(node) {
+      if (!node.attachments) node.attachments = [];
+    }
+
+    function createLabelBubble(
+      x,
+      y,
+      text = "Module",
+      description = ""
+    ) {
+      const node = {
+        id: nextId++,
+        type: "label",
+        x,
+        y,
+        baseR: 90,
+        r: 90,
+        text,
+        description,
+        parentId: null,
+        bubbleColor: null,
+        textColor: null,
+        floatPhase: Math.random() * Math.PI * 2,
+        hovered: false,
+        vx: 0,
+        vy: 0,
+        childOrbitPhase: Math.random() * Math.PI * 2,
+        attachments: [],
+        fade: 0,
+        fadeState: "appearing"
+      };
+      updateBubbleSize(node);
+      nodes.push(node);
+
+      const others = getLabelNodes().filter(l => l.id !== node.id);
+      if (others.length > 0) {
+        let nearest = null;
+        let minDist = Infinity;
+        for (const o of others) {
+          const dx = node.x - o.x;
+          const dy = node.y - o.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < minDist) {
+            minDist = d;
+            nearest = o;
+          }
+        }
+        if (nearest) {
+          const dx = node.x - nearest.x || 1;
+          const dy = node.y - nearest.y || 0.1;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+          const pushDist = node.baseR + nearest.baseR + 40;
+          node.x = nearest.x + dirX * pushDist;
+          node.y = nearest.y + dirY * pushDist;
+          node.vx = dirX * 60;
+          node.vy = dirY * 60;
+
+          addLink(node.id, nearest.id);
+        }
+      }
+
+      resolveAllCollisions(node);
+      selectedLinkIndex = null;
+      selectedNode = node;
+      if (!isInitializing) pushHistory();
+      render();
+      updateSidePanel();
+      return node;
+    }
+
+    function createDescriptorBubble(
+      x,
+      y,
+      parentId = null,
+      text = "Task",
+      description = ""
+    ) {
+      const node = {
+        id: nextId++,
+        type: "descriptor",
+        x,
+        y,
+        baseR: 26,
+        r: 26,
+        text,
+        description,
+        parentId,
+        bubbleColor: null,
+        textColor: null,
+        orbitAngle: Math.random() * Math.PI * 2,
+        floatPhase: Math.random() * Math.PI * 2,
+        hovered: false,
+        attachments: [],
+        fade: 0,
+        fadeState: "appearing"
+      };
+      updateBubbleSize(node);
+      nodes.push(node);
+      selectedLinkIndex = null;
+      selectedNode = node;
+      if (!isInitializing) pushHistory();
+      render();
+      updateSidePanel();
+      return node;
+    }
+
+    function deleteNode(node) {
+      if (!node) return;
+
+      // Mark this node (and any descendants, if module) to fade out.
+      const toDelete = new Set();
+      toDelete.add(node.id);
+      if (node.type === "label") {
+        let changed = true;
+        while (changed) {
+          changed = false;
+          for (const n of nodes) {
+            if (n.parentId != null && toDelete.has(n.parentId) && !toDelete.has(n.id)) {
+              toDelete.add(n.id);
+              changed = true;
+            }
+          }
+        }
+      }
+
+      for (const n of nodes) {
+        if (toDelete.has(n.id)) {
+          n.fadeState = "disappearing";
+        }
+      }
+
+      selectedNode = null;
+      selectedLinkIndex = null;
+      pushHistory();
+      render();
+      updateSidePanel();
+    }
+
+    function addLink(sourceId, targetId) {
+      if (sourceId === targetId) return;
+
+      const a = getNodeById(sourceId);
+      const b = getNodeById(targetId);
+      if (!a || !b) return;
+
+      // Never allow links between ancestor/descendant pairs (no parent↔child lines)
+      if (areAncestorDescendant(a, b)) return;
+
+      const exists = links.some(
+        l =>
+          (l.sourceId === sourceId && l.targetId === targetId) ||
+          (l.sourceId === targetId && l.targetId === sourceId)
+      );
+      if (!exists) {
+        links.push({
+          sourceId,
+          targetId,
+          direction: "both" // default new links to bidirectional
+        });
+      }
+    }
+
+    // --- Collision for labels -------------------------------------------
+
+    function resolveAllCollisions(movedNode) {
+      if (!movedNode || movedNode.type !== "label") return;
+      const labels = getLabelNodes();
+      let changed = true;
+      let safety = 0;
+      while (changed && safety < 40) {
+        changed = false;
+        safety++;
+        for (const other of labels) {
+          if (other.id === movedNode.id) continue;
+          const dx = movedNode.x - other.x;
+          const dy = movedNode.y - other.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+          const minDist = movedNode.baseR + other.baseR + 20;
+          if (dist < minDist) {
+            const overlap = minDist - dist;
+            const pushX = (dx / dist) * (overlap / 2);
+            const pushY = (dy / dist) * (overlap / 2);
+            movedNode.x += pushX;
+            movedNode.y += pushY;
+            other.x -= pushX;
+            other.y -= pushY;
+            changed = true;
+          }
+        }
+      }
+    }
+
+    // --- Drop handling ---------------------------------------------------
+
+    function handleDrop(node) {
+      let changed = false;
+
+      if (node.type === "label") {
+        for (const other of getLabelNodes()) {
+          if (other.id === node.id) continue;
+          const dx = node.x - other.x;
+          const dy = node.y - other.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const threshold = (node.r + other.r) * 1.2;
+          if (dist < threshold) {
+            addLink(node.id, other.id);
+            changed = true;
+          }
+        }
+        resolveAllCollisions(node);
+      } else if (node.type === "descriptor") {
+        // Find the *smallest* bubble (module or task) that contains this task,
+        // so nested tasks prefer their immediate parent instead of the big module.
+        let bestParent = null;
+        let bestParentR = Infinity;
+        let bestDist = Infinity;
+
+        for (const parent of nodes) {
+          if (parent.id === node.id) continue;
+          const dx = node.x - parent.x;
+          const dy = node.y - parent.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const parentBaseR = parent.baseR || parent.r || 30;
+          if (!isFinite(dist) || parentBaseR <= 0) continue;
+
+          // Require the task to be comfortably inside the parent bubble
+          const margin = parentBaseR - node.baseR * 0.6;
+          if (dist < margin) {
+            // Prefer the smallest containing bubble; if equal size, prefer closer to center
+            if (
+              parentBaseR < bestParentR - 1e-3 ||
+              (Math.abs(parentBaseR - bestParentR) < 1e-3 && dist < bestDist)
+            ) {
+              bestParent = parent;
+              bestParentR = parentBaseR;
+              bestDist = dist;
+            }
+          }
+        }
+
+        if (bestParent) {
+          if (node.parentId !== bestParent.id) {
+            node.parentId = bestParent.id;
+            node.orbitAngle = Math.atan2(
+              node.y - bestParent.y,
+              node.x - bestParent.x
+            );
+            changed = true;
+          }
+        } else if (node.parentId !== null) {
+          node.parentId = null;
+          changed = true;
+        }
+      }
+
+      if (changed) {
+        pushHistory();
+      }
+    }
+
+    // --- Rendering -------------------------------------------------------
+
+    function clearSvg() {
+      while (viewport.firstChild) {
+        viewport.removeChild(viewport.firstChild);
+      }
+    }
+
+    function render() {
+      clearSvg();
+      ensureGlowFilters();
+      ensureArrowMarkers();
+      const defs = ensureDefs();
+      // Layered groups for z-order:
+      // bgLinkLayer  -> module-to-module link lines (behind parent/module bubbles)
+      // parentLayer  -> parent/module bubble shapes
+      // linkLayer    -> task-to-task link lines (above parent, below children)
+      // childLayer   -> child/task bubble shapes
+      // textLayer    -> all bubble text (labels & tasks)
+      // tempLayer    -> temporary connector preview line
+      const bgLinkLayer = document.createElementNS(NS, "g");
+      bgLinkLayer.setAttribute("id", "bg-link-layer");
+      viewport.appendChild(bgLinkLayer);
+
+      const parentLayer = document.createElementNS(NS, "g");
+      parentLayer.setAttribute("id", "parent-layer");
+      viewport.appendChild(parentLayer);
+
+      const linkLayer = document.createElementNS(NS, "g");
+      linkLayer.setAttribute("id", "link-layer");
+      viewport.appendChild(linkLayer);
+
+      const childLayer = document.createElementNS(NS, "g");
+      childLayer.setAttribute("id", "child-layer");
+      viewport.appendChild(childLayer);
+
+      const textLayer = document.createElementNS(NS, "g");
+      textLayer.setAttribute("id", "text-layer");
+      viewport.appendChild(textLayer);
+
+      const tempLayer = document.createElementNS(NS, "g");
+      tempLayer.setAttribute("id", "temp-layer");
+      viewport.appendChild(tempLayer);
+
+
+      // Collect task-task links for an overlay pass
+      const taskLinkDrawData = [];
+      internalTaskLinksByParent = {};
+
+      // Links with glow (halo + main line)
+      links.forEach((link, index) => {
+        const s = getNodeById(link.sourceId);
+        const t = getNodeById(link.targetId);
+        if (!s || !t) return;
+
+        const isLabelPair = (s.type === "label" && t.type === "label");
+        const isTaskPair = (s.type === "descriptor" && t.type === "descriptor");
+
+        // Only handle links that are either module-to-module or task-to-task.
+        if (!isLabelPair && !isTaskPair) return;
+
+        // If this is a task-to-task link, either:
+        // - collect it for a global overlay pass (module-level tasks), or
+        // - if both endpoints share the same descriptor parent, store it on that
+        //   parent so it can be drawn inside the parent bubble (above the parent
+        //   circle but below its child task bubbles).
+        if (isTaskPair) {
+          const dir = link.direction || "both";
+
+          let handledInternally = false;
+          const sParentId = s.parentId;
+          const tParentId = t.parentId;
+          if (sParentId != null && sParentId === tParentId) {
+            const p = getNodeById(sParentId);
+            if (p && p.type === "descriptor") {
+              if (!internalTaskLinksByParent[sParentId]) {
+                internalTaskLinksByParent[sParentId] = [];
+              }
+              internalTaskLinksByParent[sParentId].push({
+                index,
+                sourceId: link.sourceId,
+                targetId: link.targetId,
+                direction: dir
+              });
+              handledInternally = true;
+            }
+          }
+
+          if (!handledInternally) {
+            taskLinkDrawData.push({
+              index,
+              sourceId: link.sourceId,
+              targetId: link.targetId,
+              direction: dir
+            });
+          }
+          return;
+        }
+
+        // From here down, we are drawing only module-to-module links.
+        // Normalize direction; old projects default to bidirectional.
+        const dir = link.direction || "both";
+
+        // Glow halo line (non-directional, just ambiance)
+        const glowLine = document.createElementNS(NS, "line");
+        glowLine.setAttribute("x1", s.x);
+        glowLine.setAttribute("y1", s.y);
+        glowLine.setAttribute("x2", t.x);
+        glowLine.setAttribute("y2", t.y);
+        glowLine.setAttribute("stroke", "#a7d3ff");
+        glowLine.setAttribute("stroke-width", "4");
+        glowLine.setAttribute("stroke-linecap", "round");
+        glowLine.setAttribute("opacity", "0.7");
+        glowLine.setAttribute("filter", "url(#bubbleGlow)");
+        glowLine.setAttribute("pointer-events", "none");
+        bgLinkLayer.appendChild(glowLine);
+
+        // Main crisp line (directional, solid)
+        const line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", s.x);
+        line.setAttribute("y1", s.y);
+        line.setAttribute("x2", t.x);
+        line.setAttribute("y2", t.y);
+        line.setAttribute("class", "link-line");
+        line.setAttribute("filter", "url(#bubbleGlow)");
+        line.setAttribute("pointer-events", "stroke");
+        line.dataset.index = index;
+
+        // Arrowheads according to direction
+        if (index === selectedLinkIndex) {
+          line.classList.add("selected");
+        }
+
+        line.addEventListener("mousedown", onLinkMouseDown);
+        line.addEventListener("contextmenu", onLinkContextMenu);
+        bgLinkLayer.appendChild(line);
+
+        // Directional pulse: a small glowing dot that travels strictly
+        // between the edges of the two bubbles (circle boundaries).
+        const sr = s.r || s.baseR || 20;
+        const tr = t.r || t.baseR || 20;
+        const dx = t.x - s.x;
+        const dy = t.y - s.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+        const ux = dx / dist;
+        const uy = dy / dist;
+
+        // Edge-to-edge segment
+        const startX = s.x + ux * sr;
+        const startY = s.y + uy * sr;
+        const endX = t.x - ux * tr;
+        const endY = t.y - uy * tr;
+
+        // Base phase 0..1
+        let basePhase = (linkPulseOffset * 0.002) % 1;
+
+        let edgePhase;
+        if (dir === "ab") {
+          // From source edge to target edge
+          edgePhase = basePhase;
+        } else if (dir === "ba") {
+          // From target edge back to source edge
+          edgePhase = 1 - basePhase;
+        } else {
+          // Bidirectional: bounce between edges using a triangle wave
+          // 0->1->0 pattern over time.
+          const wave = (linkPulseOffset * 0.002) % 2; // 0..2
+          edgePhase = wave <= 1 ? wave : 2 - wave;   // 0..1..0
+        }
+
+        const px = startX + (endX - startX) * edgePhase;
+        const py = startY + (endY - startY) * edgePhase;
+
+        const pulse = document.createElementNS(NS, "circle");
+        pulse.setAttribute("cx", px);
+        pulse.setAttribute("cy", py);
+        pulse.setAttribute("r", 6);
+        pulse.setAttribute("fill", "#a7d3ff");
+        pulse.setAttribute("opacity", "0.95");
+        pulse.setAttribute("filter", "url(#bubbleGlow)");
+        pulse.setAttribute("pointer-events", "none");
+        bgLinkLayer.appendChild(pulse);
+      });
+
+
+
+      // Labels
+      for (const node of getLabelNodes()) {
+        const g = document.createElementNS(NS, "g");
+        g.setAttribute("class", "label-bubble");
+        g.dataset.id = node.id;
+        if (node.fade != null) {
+          g.setAttribute("opacity", String(node.fade));
+        }
+
+        const defaultBase = "#1e2c4d";
+        const defaultStroke = "#a7d3ff";
+        const defaultText = "#f5f7fb";
+
+        // Main fill circle
+        const circle = document.createElementNS(NS, "circle");
+        circle.setAttribute("cx", node.x);
+        circle.setAttribute("cy", node.y);
+        circle.setAttribute("r", node.r);
+
+        const gradId = "labelGradient_" + node.id;
+        let grad = document.getElementById(gradId);
+        if (!grad) {
+          grad = document.createElementNS(NS, "radialGradient");
+          grad.setAttribute("id", gradId);
+          defs.appendChild(grad);
+        }
+        grad.innerHTML = "";
+        const baseColor = node.bubbleColor || defaultBase;
+        const inner = tintColor(baseColor, 1.25);
+        const mid = baseColor;
+        const outer = tintColor(baseColor, 0.6);
+
+        const s0 = document.createElementNS(NS, "stop");
+        s0.setAttribute("offset", "0%");
+        s0.setAttribute("stop-color", inner);
+        const s1 = document.createElementNS(NS, "stop");
+        s1.setAttribute("offset", "60%");
+        s1.setAttribute("stop-color", mid);
+        const s2 = document.createElementNS(NS, "stop");
+        s2.setAttribute("offset", "100%");
+        s2.setAttribute("stop-color", outer);
+        grad.appendChild(s0);
+        grad.appendChild(s1);
+        grad.appendChild(s2);
+
+        circle.setAttribute("fill", "url(#" + gradId + ")");
+
+        let strokeColor = node.bubbleColor || defaultStroke;
+        let strokeWidth = 1.4;
+        if (selectedNode && selectedNode.id === node.id) {
+          strokeWidth = 2.4;
+        }
+        circle.setAttribute("stroke", strokeColor);
+        circle.setAttribute("stroke-width", strokeWidth);
+
+        // Glow halo circle around label outline
+        const halo = document.createElementNS(NS, "circle");
+        halo.setAttribute("cx", node.x);
+        halo.setAttribute("cy", node.y);
+        halo.setAttribute("r", node.r + 1.5);
+        halo.setAttribute("fill", "none");
+        halo.setAttribute("stroke", "#a7d3ff");
+        halo.setAttribute("stroke-width", "4");
+        halo.setAttribute("opacity", "0.8");
+        halo.setAttribute("filter", "url(#bubbleGlow)");
+
+        const text = document.createElementNS(NS, "text");
+        text.setAttribute("x", node.x);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("class", "bubble-text");
+        text.setAttribute("fill", node.textColor || defaultText);
+
+        const charWidth = 7;
+        const maxChars = Math.max(
+          8,
+          Math.floor((node.r * 1.6) / charWidth)
+        );
+        const lines = wrapTextLines(node.text || "Module", maxChars);
+        const lineHeightPx = 14;
+        const totalHeight = (lines.length - 1) * lineHeightPx;
+        const baseY = node.y - totalHeight / 2;
+
+        lines.forEach((line, i) => {
+          const tspan = document.createElementNS(NS, "tspan");
+          tspan.setAttribute("x", node.x);
+          tspan.setAttribute(
+            "y",
+            baseY + i * lineHeightPx
+          );
+          tspan.textContent = line;
+          text.appendChild(tspan);
+        });
+
+        g.appendChild(halo);
+        g.appendChild(circle);
+        textLayer.appendChild(text);
+
+        if (node.description && node.description.trim().length > 0) {
+          const desc = document.createElementNS(NS, "text");
+          desc.setAttribute("x", node.x);
+          desc.setAttribute("y", node.y + node.r - 16);
+          desc.setAttribute("text-anchor", "middle");
+          desc.setAttribute("class", "desc-preview");
+          desc.setAttribute("fill", node.textColor || defaultText);
+          desc.setAttribute("opacity", "0.6");
+          const preview =
+            node.description.length > 40
+              ? node.description.slice(0, 37) + "..."
+              : node.description;
+          desc.textContent = preview;
+          textLayer.appendChild(desc);
+        }
+
+        g.setAttribute("filter", "url(#bubbleGlow)");
+        attachBubbleEvents(g, node);
+        parentLayer.appendChild(g);
+      }
+
+      // Descriptors (tasks): draw all of them, whether free or nested.
+      // All descriptor bubbles (including those that act as parents of other tasks)
+      // are drawn on the childLayer so that task-to-task link lines can always sit
+      // behind the task bubbles themselves while still appearing above their parent module.
+      const descriptorNodes = nodes.filter(n => n.type === "descriptor");
+      for (const node of descriptorNodes) {
+        drawDescriptor(node, defs, childLayer, textLayer, internalTaskLinksByParent);
+      }
+
+      // Overlay pass: draw task-to-task links on top of bubbles
+      taskLinkDrawData.forEach(data => {
+        const s = getNodeById(data.sourceId);
+        const t = getNodeById(data.targetId);
+        if (!s || !t) return;
+
+        const dir = data.direction || "both";
+
+        // All task-to-task links are drawn on the main task link layer so they:
+        // - stay ABOVE parent/module bubbles
+        // - stay BELOW the task bubbles they connect.
+        const linkGroup = linkLayer;
+
+        const glowLine = document.createElementNS(NS, "line");
+        glowLine.setAttribute("x1", s.x);
+        glowLine.setAttribute("y1", s.y);
+        glowLine.setAttribute("x2", t.x);
+        glowLine.setAttribute("y2", t.y);
+        glowLine.setAttribute("stroke", "#a7d3ff");
+        glowLine.setAttribute("stroke-width", "4");
+        glowLine.setAttribute("stroke-linecap", "round");
+        glowLine.setAttribute("opacity", "0.7");
+        glowLine.setAttribute("filter", "url(#bubbleGlow)");
+        glowLine.setAttribute("pointer-events", "none");
+        linkGroup.appendChild(glowLine);
+
+        const line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", s.x);
+        line.setAttribute("y1", s.y);
+        line.setAttribute("x2", t.x);
+        line.setAttribute("y2", t.y);
+        line.setAttribute("class", "link-line");
+        line.setAttribute("filter", "url(#bubbleGlow)");
+        line.setAttribute("pointer-events", "stroke");
+        line.dataset.index = data.index;
+
+        if (data.index === selectedLinkIndex) {
+          line.classList.add("selected");
+        }
+
+        line.addEventListener("mousedown", onLinkMouseDown);
+        line.addEventListener("contextmenu", onLinkContextMenu);
+        linkGroup.appendChild(line);
+
+        // Directional pulse between bubble edges
+        const sr = s.r || s.baseR || 20;
+        const tr = t.r || t.baseR || 20;
+        const dx = t.x - s.x;
+        const dy = t.y - s.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+        const ux = dx / dist;
+        const uy = dy / dist;
+
+        const startX = s.x + ux * sr;
+        const startY = s.y + uy * sr;
+        const endX = t.x - ux * tr;
+        const endY = t.y - uy * tr;
+
+        let basePhase = (linkPulseOffset * 0.002) % 1;
+        let edgePhase;
+        if (dir === "ab") {
+          edgePhase = basePhase;
+        } else if (dir === "ba") {
+          edgePhase = 1 - basePhase;
+        } else {
+          const wave = (linkPulseOffset * 0.002) % 2;
+          edgePhase = wave <= 1 ? wave : 2 - wave;
+        }
+
+        const px = startX + (endX - startX) * edgePhase;
+        const py = startY + (endY - startY) * edgePhase;
+
+        const pulse = document.createElementNS(NS, "circle");
+        pulse.setAttribute("cx", px);
+        pulse.setAttribute("cy", py);
+        pulse.setAttribute("r", 6);
+        pulse.setAttribute("fill", "#a7d3ff");
+        pulse.setAttribute("opacity", "0.95");
+        pulse.setAttribute("filter", "url(#bubbleGlow)");
+        pulse.setAttribute("pointer-events", "none");
+        linkGroup.appendChild(pulse);
+      });
+
+      // Temporary connector line (with glow) drawn from bubble edge to cursor, on top of all nodes
+      if (tempLink && tempLink.fromId != null) {
+        const fromNode = getNodeById(tempLink.fromId);
+        if (fromNode) {
+          const dx = tempLink.toX - fromNode.x;
+          const dy = tempLink.toY - fromNode.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+          const ux = dx / dist;
+          const uy = dy / dist;
+          const sr = fromNode.r || fromNode.baseR || 20;
+
+          const startX = fromNode.x + ux * sr;
+          const startY = fromNode.y + uy * sr;
+
+          const line = document.createElementNS(NS, "line");
+          line.setAttribute("x1", startX);
+          line.setAttribute("y1", startY);
+          line.setAttribute("x2", tempLink.toX);
+          line.setAttribute("y2", tempLink.toY);
+          line.setAttribute("class", "temp-link");
+          line.setAttribute("filter", "url(#bubbleGlow)");
+          tempLayer.appendChild(line);
+        }
+      }
+    }
+
+    function drawDescriptor(node, defs, childLayer, textLayer, internalTaskLinksByParent) {
+      const g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "descriptor-bubble");
+      g.dataset.id = node.id;
+      if (node.fade != null) {
+        g.setAttribute("opacity", String(node.fade));
+      }
+      g.setAttribute("filter", "url(#bubbleGlow)");
+
+      const defaultBase = "#1b3c60";
+      const defaultStroke = "rgba(167, 211, 255, 0.9)";
+      const defaultText = "#f5f7fb";
+
+      const circle = document.createElementNS(NS, "circle");
+      circle.setAttribute("cx", node.x);
+      circle.setAttribute("cy", node.y);
+      circle.setAttribute("r", node.r);
+
+      const gradId = "descriptorGradient_" + node.id;
+      let grad = document.getElementById(gradId);
+      if (!grad) {
+        grad = document.createElementNS(NS, "radialGradient");
+        grad.setAttribute("id", gradId);
+        defs.appendChild(grad);
+      }
+      grad.innerHTML = "";
+      const baseColor = node.bubbleColor || defaultBase;
+      const inner = tintColor(baseColor, 1.25);
+      const mid = baseColor;
+      const outer = tintColor(baseColor, 0.6);
+
+      const s0 = document.createElementNS(NS, "stop");
+      s0.setAttribute("offset", "0%");
+      s0.setAttribute("stop-color", inner);
+      const s1 = document.createElementNS(NS, "stop");
+      s1.setAttribute("offset", "70%");
+      s1.setAttribute("stop-color", mid);
+      const s2 = document.createElementNS(NS, "stop");
+      s2.setAttribute("offset", "100%");
+      s2.setAttribute("stop-color", outer);
+      grad.appendChild(s0);
+      grad.appendChild(s1);
+      grad.appendChild(s2);
+
+      circle.setAttribute("fill", "url(#" + gradId + ")");
+
+      // Draw the descriptor's main circle first so that any internal task links
+      // we render for its children can appear visually above this parent bubble.
+      g.appendChild(circle);
+
+      let strokeColor = node.bubbleColor || defaultStroke;
+      let strokeWidth = 1.1;
+      if (selectedNode && selectedNode.id === node.id) {
+        strokeWidth = 2.0;
+      }
+      circle.setAttribute("stroke", strokeColor);
+      circle.setAttribute("stroke-width", strokeWidth);
+
+      // Internal task-to-task links whose parent is this descriptor:
+      if (internalTaskLinksByParent && internalTaskLinksByParent[node.id]) {
+        const internalLinks = internalTaskLinksByParent[node.id];
+        for (const data of internalLinks) {
+          const s = getNodeById(data.sourceId);
+          const t = getNodeById(data.targetId);
+          if (!s || !t) continue;
+
+          const dir = data.direction || "both";
+
+          // Glow halo line
+          const glowLine = document.createElementNS(NS, "line");
+          glowLine.setAttribute("x1", s.x);
+          glowLine.setAttribute("y1", s.y);
+          glowLine.setAttribute("x2", t.x);
+          glowLine.setAttribute("y2", t.y);
+          glowLine.setAttribute("stroke", "#a7d3ff");
+          glowLine.setAttribute("stroke-width", "4");
+          glowLine.setAttribute("stroke-linecap", "round");
+          glowLine.setAttribute("opacity", "0.7");
+          glowLine.setAttribute("filter", "url(#bubbleGlow)");
+          glowLine.setAttribute("pointer-events", "none");
+          g.appendChild(glowLine);
+
+          // Main line
+          const line = document.createElementNS(NS, "line");
+          line.setAttribute("x1", s.x);
+          line.setAttribute("y1", s.y);
+          line.setAttribute("x2", t.x);
+          line.setAttribute("y2", t.y);
+          line.setAttribute("class", "link-line");
+          line.setAttribute("filter", "url(#bubbleGlow)");
+          line.setAttribute("pointer-events", "stroke");
+          line.dataset.index = data.index;
+          if (data.index === selectedLinkIndex) {
+            line.classList.add("selected");
+          }
+          line.addEventListener("mousedown", onLinkMouseDown);
+          line.addEventListener("contextmenu", onLinkContextMenu);
+          g.appendChild(line);
+
+          // Directional pulse along the edge-to-edge segment between children
+          const sr = s.r || s.baseR || 20;
+          const tr = t.r || t.baseR || 20;
+          const dx = t.x - s.x;
+          const dy = t.y - s.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+          const ux = dx / dist;
+          const uy = dy / dist;
+
+          const startX = s.x + ux * sr;
+          const startY = s.y + uy * sr;
+          const endX = t.x - ux * tr;
+          const endY = t.y - uy * tr;
+
+          let basePhase = (linkPulseOffset * 0.002) % 1;
+          let edgePhase;
+          if (dir === "ab") {
+            edgePhase = basePhase;
+          } else if (dir === "ba") {
+            edgePhase = 1 - basePhase;
+          } else {
+            const wave = (linkPulseOffset * 0.002) % 2;
+            edgePhase = wave <= 1 ? wave : 2 - wave;
+          }
+
+          const px = startX + (endX - startX) * edgePhase;
+          const py = startY + (endY - startY) * edgePhase;
+
+          const pulse = document.createElementNS(NS, "circle");
+          pulse.setAttribute("cx", px);
+          pulse.setAttribute("cy", py);
+          pulse.setAttribute("r", 6);
+          pulse.setAttribute("fill", "#a7d3ff");
+          pulse.setAttribute("opacity", "0.95");
+          pulse.setAttribute("filter", "url(#bubbleGlow)");
+          pulse.setAttribute("pointer-events", "none");
+          g.appendChild(pulse);
+        }
+      }
+
+      const text = document.createElementNS(NS, "text");
+      text.setAttribute("x", node.x);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("class", "bubble-text descriptor-text");
+      text.setAttribute("fill", node.textColor || defaultText);
+
+      const charWidth = 6;
+      const maxChars = Math.max(
+        6,
+        Math.floor((node.r * 1.4) / charWidth)
+      );
+      const lines = wrapTextLines(node.text || "Task", maxChars);
+      const lineHeightPx = 11;
+      const totalHeight = (lines.length - 1) * lineHeightPx;
+      const baseY = node.y - totalHeight / 2;
+
+      lines.forEach((line, i) => {
+        const tspan = document.createElementNS(NS, "tspan");
+        tspan.setAttribute("x", node.x);
+        tspan.setAttribute(
+          "y",
+          baseY + i * lineHeightPx
+        );
+        tspan.textContent = line;
+        text.appendChild(tspan);
+      });
+
+      textLayer.appendChild(text);
+
+      attachBubbleEvents(g, node);
+      childLayer.appendChild(g);
+    }
+
+    function attachBubbleEvents(g, node) {
+      g.addEventListener("mousedown", onNodeMouseDown);
+      g.addEventListener("contextmenu", onNodeContextMenu);
+      g.addEventListener("dblclick", e => {
+        e.stopPropagation();
+        openEditModal(node);
+      });
+      g.addEventListener("click", e => {
+        e.stopPropagation();
+        selectedNode = node;
+        selectedLinkIndex = null;
+        render();
+        updateSidePanel();
+      });
+    }
+
+    // --- Side panel logic ------------------------------------------------
+
+    function renderParentsList() {
+      sideParentsList.innerHTML = "";
+      if (!selectedNode) return;
+      const chain = [];
+      let cur = selectedNode;
+      let guard = 0;
+      while (cur && cur.parentId != null && guard < 50) {
+        const parent = getNodeById(cur.parentId);
+        if (!parent) break;
+        chain.push(parent);
+        cur = parent;
+        guard++;
+      }
+      if (!chain.length) return;
+      chain.reverse(); // root first
+
+      for (const parent of chain) {
+        const item = document.createElement("div");
+        item.className = "child-item";
+        const labelSpan = document.createElement("span");
+        labelSpan.textContent = parent.text || (parent.type === "label" ? "Module" : "Task");
+        const typeSpan = document.createElement("span");
+        typeSpan.className = "child-type";
+        typeSpan.textContent = parent.type === "label" ? "Module" : "Task";
+        item.appendChild(labelSpan);
+        item.appendChild(typeSpan);
+        item.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          selectedNode = parent;
+          selectedLinkIndex = null;
+          render();
+          updateSidePanel();
+        });
+        sideParentsList.appendChild(item);
+      }
+    }
+
+    function renderChildrenList() {
+      sideChildrenList.innerHTML = "";
+      if (!selectedNode) return;
+      const children = nodes.filter(n => n.parentId === selectedNode.id);
+      if (!children.length) return;
+
+      for (const child of children) {
+        const item = document.createElement("div");
+        item.className = "child-item";
+        const labelSpan = document.createElement("span");
+        labelSpan.textContent = child.text || (child.type === "label" ? "Module" : "Task");
+        const typeSpan = document.createElement("span");
+        typeSpan.className = "child-type";
+        typeSpan.textContent = child.type === "label" ? "Module" : "Task";
+        item.appendChild(labelSpan);
+        item.appendChild(typeSpan);
+        item.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          selectedNode = child;
+          selectedLinkIndex = null;
+          render();
+          updateSidePanel();
+        });
+        sideChildrenList.appendChild(item);
+      }
+    }
+
+    function getNodeIO(nodeId) {
+      const inputMap = new Map();
+      const outputMap = new Map();
+
+      for (const link of links) {
+        const dir = link.direction || "both";
+        const sId = link.sourceId;
+        const tId = link.targetId;
+        const sNode = getNodeById(sId);
+        const tNode = getNodeById(tId);
+        if (!sNode || !tNode) continue;
+
+        const isLabelPair = (sNode.type === "label" && tNode.type === "label");
+        const isTaskPair = (sNode.type === "descriptor" && tNode.type === "descriptor");
+        // Skip module-task links entirely for IO (parent/child handles that)
+        if (!isLabelPair && !isTaskPair) continue;
+
+        if (dir === "ab") {
+          if (sId === nodeId) {
+            const other = tNode;
+            if (other) outputMap.set(other.id, other);
+          }
+          if (tId === nodeId) {
+            const other = sNode;
+            if (other) inputMap.set(other.id, other);
+          }
+        } else if (dir === "ba") {
+          if (tId === nodeId) {
+            const other = sNode;
+            if (other) outputMap.set(other.id, other);
+          }
+          if (sId === nodeId) {
+            const other = tNode;
+            if (other) inputMap.set(other.id, other);
+          }
+        } else {
+          // both directions: treat neighbor as both input and output
+          if (sId === nodeId) {
+            const other = tNode;
+            if (other) {
+              inputMap.set(other.id, other);
+              outputMap.set(other.id, other);
+            }
+          }
+          if (tId === nodeId) {
+            const other = sNode;
+            if (other) {
+              inputMap.set(other.id, other);
+              outputMap.set(other.id, other);
+            }
+          }
+        }
+      }
+
+      return {
+        inputs: Array.from(inputMap.values()),
+        outputs: Array.from(outputMap.values())
+      };
+    }
+
+    function createIOItem(node) {
+      const item = document.createElement("div");
+      item.className = "child-item";
+      const labelSpan = document.createElement("span");
+      labelSpan.textContent = node.text || (node.type === "label" ? "Module" : "Task");
+      const typeSpan = document.createElement("span");
+      typeSpan.className = "child-type";
+      typeSpan.textContent = node.type === "label" ? "Module" : "Task";
+      item.appendChild(labelSpan);
+      item.appendChild(typeSpan);
+      item.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        selectedNode = node;
+        selectedLinkIndex = null;
+        render();
+        updateSidePanel();
+      });
+      return item;
+    }
+
+    function renderIOForNode(node) {
+      sideInputsList.innerHTML = "";
+      sideOutputsList.innerHTML = "";
+      if (!node) return;
+      const io = getNodeIO(node.id);
+      io.inputs.forEach(n => {
+        sideInputsList.appendChild(createIOItem(n));
+      });
+      io.outputs.forEach(n => {
+        sideOutputsList.appendChild(createIOItem(n));
+      });
+    }
+
+    function renderIOForLink(link) {
+      sideInputsList.innerHTML = "";
+      sideOutputsList.innerHTML = "";
+
+      if (!link) return;
+      const s = getNodeById(link.sourceId);
+      const t = getNodeById(link.targetId);
+      if (!s || !t) return;
+
+      const dir = link.direction || "both";
+      const inputs = new Map();
+      const outputs = new Map();
+
+      if (dir === "ab") {
+        inputs.set(s.id, s);
+        outputs.set(t.id, t);
+      } else if (dir === "ba") {
+        inputs.set(t.id, t);
+        outputs.set(s.id, s);
+      } else {
+        // both directions: each is both input and output
+        inputs.set(s.id, s);
+        inputs.set(t.id, t);
+        outputs.set(s.id, s);
+        outputs.set(t.id, t);
+      }
+
+      inputs.forEach(n => {
+        sideInputsList.appendChild(createIOItem(n));
+      });
+      outputs.forEach(n => {
+        sideOutputsList.appendChild(createIOItem(n));
+      });
+    }
+
+    function updateSidePanel() {
+      if (selectedNode) {
+        sidePanel.classList.add("has-selection");
+        sideType.textContent =
+          selectedNode.type === "label" ? "Module" : "Task";
+        sideTitle.readOnly = false;
+        sideDescription.readOnly = false;
+        sideTitle.value = selectedNode.text || "";
+        sideDescription.value = selectedNode.description || "";
+
+        const isLabel = selectedNode.type === "label";
+        const defaultBubble = isLabel ? "#1e2c4d" : "#1b3c60";
+        const defaultText = "#f5f7fb";
+
+        sideBubbleColor.value = selectedNode.bubbleColor || defaultBubble;
+        sideTextColor.value = selectedNode.textColor || defaultText;
+
+        renderParentsList();
+        renderChildrenList();
+        renderAttachmentsList();
+        renderIOForNode(selectedNode);
+      } else if (
+        selectedLinkIndex !== null &&
+        selectedLinkIndex >= 0 &&
+        selectedLinkIndex < links.length
+      ) {
+        const link = links[selectedLinkIndex];
+        sidePanel.classList.add("has-selection");
+        sideType.textContent = "Connection";
+
+        sideTitle.readOnly = true;
+        sideDescription.readOnly = true;
+        sideTitle.value = "";
+        sideDescription.value = "";
+
+        sideParentsList.innerHTML = "";
+        sideChildrenList.innerHTML = "";
+        sideAttachmentsList.innerHTML = "";
+
+        renderIOForLink(link);
+      } else {
+        sidePanel.classList.remove("has-selection");
+        sideType.textContent = "";
+        sideTitle.readOnly = false;
+        sideDescription.readOnly = false;
+        sideTitle.value = "";
+        sideDescription.value = "";
+        sideParentsList.innerHTML = "";
+        sideChildrenList.innerHTML = "";
+        sideAttachmentsList.innerHTML = "";
+        sideInputsList.innerHTML = "";
+        sideOutputsList.innerHTML = "";
+      }
+    }
+
+    function renderAttachmentsList() {
+      sideAttachmentsList.innerHTML = "";
+      if (!selectedNode) return;
+      ensureAttachmentsArray(selectedNode);
+      if (!selectedNode.attachments.length) return;
+
+      selectedNode.attachments.forEach((att, index) => {
+        const item = document.createElement("div");
+        item.className = "attachment-item";
+
+        if (att.isImage && att.dataUrl) {
+          const img = document.createElement("img");
+          img.className = "attachment-thumb";
+          img.src = att.dataUrl;
+          img.alt = att.name || "image";
+          item.appendChild(img);
+        } else {
+          const placeholder = document.createElement("div");
+          placeholder.style.width = "40px";
+          placeholder.style.height = "32px";
+          placeholder.style.borderRadius = "4px";
+          placeholder.style.border = "1px solid rgba(148,186,255,0.35)";
+          placeholder.style.display = "flex";
+          placeholder.style.alignItems = "center";
+          placeholder.style.justifyContent = "center";
+          placeholder.style.fontSize = "14px";
+          placeholder.style.opacity = "0.7";
+          placeholder.textContent = "📄";
+          item.appendChild(placeholder);
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "attachment-meta";
+        const nameEl = document.createElement("div");
+        nameEl.className = "attachment-name";
+        nameEl.textContent = att.name || "Unnamed";
+        const typeEl = document.createElement("div");
+        typeEl.className = "attachment-type";
+        typeEl.textContent = att.type || "Unknown type";
+        meta.appendChild(nameEl);
+        meta.appendChild(typeEl);
+        item.appendChild(meta);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "attachment-remove";
+        removeBtn.textContent = "✕";
+        removeBtn.title = "Remove attachment";
+        removeBtn.addEventListener("click", () => {
+          if (!selectedNode) return;
+          selectedNode.attachments.splice(index, 1);
+          pushHistory();
+          renderAttachmentsList();
+        });
+        item.appendChild(removeBtn);
+
+        sideAttachmentsList.appendChild(item);
+      });
+    }
+
+    sideTitle.addEventListener("input", () => {
+      if (!selectedNode) return;
+      selectedNode.text =
+        sideTitle.value ||
+        (selectedNode.type === "label" ? "Module" : "Task");
+      updateBubbleSize(selectedNode);
+      render();
+    });
+    sideTitle.addEventListener("blur", () => {
+      if (!selectedNode) return;
+      pushHistory();
+    });
+
+    sideDescription.addEventListener("input", () => {
+      if (!selectedNode) return;
+      selectedNode.description = sideDescription.value || "";
+      updateBubbleSize(selectedNode);
+      render();
+    });
+    sideDescription.addEventListener("blur", () => {
+      if (!selectedNode) return;
+      pushHistory();
+    });
+
+    sideBubbleColor.addEventListener("input", () => {
+      if (!selectedNode) return;
+      const isLabel = selectedNode.type === "label";
+      const defaultBubble = isLabel ? "#1e2c4d" : "#1b3c60";
+      const chosen = sideBubbleColor.value;
+      selectedNode.bubbleColor =
+        chosen === defaultBubble ? null : chosen;
+      render();
+    });
+    sideBubbleColor.addEventListener("blur", () => {
+      if (!selectedNode) return;
+      pushHistory();
+    });
+
+    sideTextColor.addEventListener("input", () => {
+      if (!selectedNode) return;
+      const defaultText = "#f5f7fb";
+      const chosen = sideTextColor.value;
+      selectedNode.textColor = chosen === defaultText ? null : chosen;
+      render();
+    });
+    sideTextColor.addEventListener("blur", () => {
+      if (!selectedNode) return;
+      pushHistory();
+    });
+
+    sideAddTaskBtn.addEventListener("click", () => {
+      if (!selectedNode) return;
+      // Create a new Task inside the selected bubble
+      createDescriptorBubble(selectedNode.x, selectedNode.y, selectedNode.id, "New Task");
+    });
+
+    sideAttachInput.addEventListener("change", () => {
+      if (!selectedNode) {
+        sideAttachInput.value = "";
+        return;
+      }
+      const files = Array.from(sideAttachInput.files || []);
+      if (!files.length) return;
+      ensureAttachmentsArray(selectedNode);
+
+      let remaining = files.length;
+      files.forEach(file => {
+        const reader = new FileReader();
+        const isImage = file.type && file.type.startsWith("image/");
+        reader.onload = e => {
+          const att = {
+            id: Date.now().toString(36) + "_" + Math.random().toString(36).slice(2),
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            isImage,
+            dataUrl: isImage ? e.target.result : null
+          };
+          selectedNode.attachments.push(att);
+          remaining--;
+          if (remaining === 0) {
+            pushHistory();
+            renderAttachmentsList();
+          }
+        };
+        if (isImage) {
+          reader.readAsDataURL(file);
+        } else {
+          reader.readAsArrayBuffer(file); // we only care about meta, not content
+        }
+      });
+      sideAttachInput.value = "";
+    });
+
+    // --- Dragging & connector mode --------------------------------------
+
+    function onNodeMouseDown(e) {
+      if (e.button !== 0) return;
+      hideContextMenu();
+      selectedLinkIndex = null;
+
+      const id = parseInt(e.currentTarget.dataset.id, 10);
+      const node = getNodeById(id);
+      if (!node) return;
+
+      // If the Task tool is active, clicking a bubble creates a new Task inside it.
+      if (currentTool === "descriptor") {
+        const pt = svgPointFromClient(e.clientX, e.clientY);
+        createDescriptorBubble(pt.x, pt.y, node.id, "New Task");
+        return;
+      }
+
+      // Connector tool: start link from any bubble (module or task)
+      if (currentTool === "connector") {
+        isDrawingConnector = true;
+        const worldPt = svgPointFromClient(e.clientX, e.clientY);
+        tempLink = {
+          fromId: node.id,
+          toX: worldPt.x,
+          toY: worldPt.y
+        };
+        window.addEventListener("mousemove", onConnectorMouseMove);
+        window.addEventListener("mouseup", onConnectorMouseUp);
+        return;
+      }
+
+      // Default: start dragging this node
+      draggingNode = node;
+      dragMoved = false;
+
+      const worldPt = svgPointFromClient(e.clientX, e.clientY);
+      dragOffsetX = worldPt.x - node.x;
+      dragOffsetY = worldPt.y - node.y;
+      dragLastX = node.x;
+      dragLastY = node.y;
+
+      e.currentTarget.classList.add("dragging");
+
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseUp);
+    }
+
+    function onMouseMove(e) {
+      const worldPt = svgPointFromClient(e.clientX, e.clientY);
+      mouseWorld = worldPt;
+      mouseOverCanvas = true;
+
+      if (panning) {
+        const dx = e.clientX - panLastX;
+        const dy = e.clientY - panLastY;
+        panX += dx;
+        panY += dy;
+        panLastX = e.clientX;
+        panLastY = e.clientY;
+        updateViewportTransform();
+      }
+
+      if (!draggingNode) return;
+      dragMoved = true;
+
+      const newX = worldPt.x - dragOffsetX;
+      const newY = worldPt.y - dragOffsetY;
+
+      const dx = newX - dragLastX;
+      const dy = newY - dragLastY;
+
+      draggingNode.x = newX;
+      draggingNode.y = newY;
+
+      if (draggingNode.type === "label") {
+        const children = getDescriptorChildren(draggingNode.id);
+        for (const child of children) {
+          child.x += dx;
+          child.y += dy;
+        }
+      }
+
+      dragLastX = newX;
+      dragLastY = newY;
+
+      render();
+    }
+
+    function onMouseUp(e) {
+      if (e.button === 1) {
+        panning = false;
+      }
+
+      if (draggingNode) {
+        handleDrop(draggingNode);
+
+        if (!dragMoved && modalBackdrop.style.display !== "flex") {
+          selectedNode = draggingNode;
+          updateSidePanel();
+        }
+
+        if (draggingNode.type === "label") {
+          draggingNode.vx = 0;
+          draggingNode.vy = 0;
+        }
+      }
+
+      draggingNode = null;
+      const drags = document.querySelectorAll(
+        ".label-bubble.dragging, .descriptor-bubble.dragging"
+      );
+      drags.forEach(el => el.classList.remove("dragging"));
+
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+
+      render();
+    }
+
+    function onConnectorMouseMove(e) {
+      if (!isDrawingConnector || !tempLink) return;
+      const worldPt = svgPointFromClient(e.clientX, e.clientY);
+      tempLink.toX = worldPt.x;
+      tempLink.toY = worldPt.y;
+      render();
+    }
+
+    function onConnectorMouseUp(e) {
+      if (!isDrawingConnector || !tempLink) {
+        window.removeEventListener("mousemove", onConnectorMouseMove);
+        window.removeEventListener("mouseup", onConnectorMouseUp);
+        return;
+      }
+
+      const fromNode = getNodeById(tempLink.fromId);
+      if (fromNode) {
+        const worldPt = svgPointFromClient(e.clientX, e.clientY);
+        let target = null;
+        let minDist = Infinity;
+
+        if (fromNode.type === "label") {
+          // Label-to-label links only
+          for (const lbl of getLabelNodes()) {
+            if (lbl.id === fromNode.id) continue;
+            const dx = worldPt.x - lbl.x;
+            const dy = worldPt.y - lbl.y;
+            const d = Math.sqrt(dx * dx + dy * dy);
+            const hr = getNodeHitRadius(lbl);
+            if (d < hr && d < minDist) {
+              minDist = d;
+              target = lbl;
+            }
+          }
+        } else if (fromNode.type === "descriptor") {
+          // Task links: only task-to-task that share the same immediate parent bubble.
+          const parentId = fromNode.parentId;
+          if (parentId != null) {
+            for (const node of nodes) {
+              if (node.id === fromNode.id) continue;
+              if (node.type !== "descriptor") continue;
+              if (node.parentId !== parentId) continue;
+
+              const dx = worldPt.x - node.x;
+              const dy = worldPt.y - node.y;
+              const d = Math.sqrt(dx * dx + dy * dy);
+              const hr = getNodeHitRadius(node);
+              if (d < hr && d < minDist) {
+                minDist = d;
+                target = node;
+              }
+            }
+          }
+        }
+
+        if (target) {
+          addLink(fromNode.id, target.id);
+          pushHistory();
+        }
+      }
+
+      isDrawingConnector = false;
+      tempLink = null;
+      window.removeEventListener("mousemove", onConnectorMouseMove);
+      window.removeEventListener("mouseup", onConnectorMouseUp);
+      render();
+    }
+
+    // --- Link selection --------------------------------------------------
+
+    function onLinkMouseDown(e) {
+      e.stopPropagation();
+      hideContextMenu();
+      const idx = parseInt(e.target.dataset.index, 10);
+      if (!isNaN(idx)) {
+        selectedLinkIndex = idx;
+        selectedNode = null;
+        render();
+        updateSidePanel();
+      }
+    }
+
+    function onLinkContextMenu(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const idx = parseInt(e.target.dataset.index, 10);
+      if (isNaN(idx)) return;
+
+      selectedLinkIndex = idx;
+      selectedNode = null;
+      render();
+      updateSidePanel();
+
+      contextTargetLinkIndex = idx;
+      const link = links[idx];
+      showContextMenuForLink(link, e.clientX, e.clientY);
+    }
+
+
+    // --- Context menu ----------------------------------------------------
+
+    function onNodeContextMenu(e) {
+      e.preventDefault();
+      const id = parseInt(e.currentTarget.dataset.id, 10);
+      contextTarget = getNodeById(id);
+      contextPosition = { x: e.clientX, y: e.clientY };
+      showContextMenuForNode(
+        contextTarget,
+        contextPosition.x,
+        contextPosition.y
+      );
+    }
+
+    svg.addEventListener("contextmenu", function (e) {
+      if (e.target === svg || e.target === viewport) {
+        e.preventDefault();
+        contextTarget = null;
+        contextPosition = { x: e.clientX, y: e.clientY };
+        showContextMenuForBackground(
+          contextPosition.x,
+          contextPosition.y
+        );
+      }
+    });
+
+    svg.addEventListener("click", function (e) {
+      if (e.target === svg || e.target === viewport) {
+        selectedNode = null;
+        if (selectedLinkIndex !== null) {
+          selectedLinkIndex = null;
+        }
+        render();
+        updateSidePanel();
+      }
+    });
+
+    window.addEventListener("click", function () {
+      hideContextMenu();
+    });
+
+    function showContextMenuForNode(node, x, y) {
+      contextMenu.innerHTML = "";
+
+      const editItem = document.createElement("div");
+      editItem.className = "menu-item";
+      editItem.textContent = "Edit text & colors…";
+      editItem.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        openEditModal(node);
+      };
+      contextMenu.appendChild(editItem);
+
+      const attachItem = document.createElement("div");
+      attachItem.className = "menu-item";
+      attachItem.textContent = "Add attachments…";
+      attachItem.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        selectedNode = node;
+        updateSidePanel();
+        sideAttachInput.click();
+      };
+      contextMenu.appendChild(attachItem);
+
+      const addLbl = document.createElement("div");
+      addLbl.className = "menu-item";
+      addLbl.textContent = "Add module bubble here";
+      addLbl.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        const pt = svgPointFromClient(x, y);
+        createLabelBubble(pt.x, pt.y, "New Module");
+      };
+      contextMenu.appendChild(addLbl);
+
+      const addDesc = document.createElement("div");
+      addDesc.className = "menu-item";
+      addDesc.textContent = "Add task bubble here";
+      addDesc.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        const pt = svgPointFromClient(x, y);
+        const parentId = node.id;
+        createDescriptorBubble(pt.x, pt.y, parentId, "New Task");
+      };
+      contextMenu.appendChild(addDesc);
+
+      if (
+        node.type === "label" &&
+        links.some(l => l.sourceId === node.id || l.targetId === node.id)
+      ) {
+        const sep1 = document.createElement("div");
+        sep1.className = "menu-separator";
+        contextMenu.appendChild(sep1);
+
+        const detachItem = document.createElement("div");
+        detachItem.className = "menu-item";
+        detachItem.textContent = "Detach from all connections";
+        detachItem.onclick = function (ev) {
+          ev.stopPropagation();
+          hideContextMenu();
+          links = links.filter(
+            l => l.sourceId !== node.id && l.targetId !== node.id
+          );
+          selectedLinkIndex = null;
+          pushHistory();
+          render();
+        };
+        contextMenu.appendChild(detachItem);
+      }
+
+      const sep2 = document.createElement("div");
+      sep2.className = "menu-separator";
+      contextMenu.appendChild(sep2);
+
+      const del = document.createElement("div");
+      del.className = "menu-item";
+      del.textContent = "Delete bubble";
+      del.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        deleteNode(node);
+      };
+      contextMenu.appendChild(del);
+
+      showContextMenuAt(x, y);
+    }
+
+    function showContextMenuForLink(link, x, y) {
+      contextMenu.innerHTML = "";
+
+      const s = getNodeById(link.sourceId);
+      const t = getNodeById(link.targetId);
+      const sLabel = s
+        ? (s.text || (s.type === "label" ? "Module" : "Task"))
+        : `#${link.sourceId}`;
+      const tLabel = t
+        ? (t.text || (t.type === "label" ? "Module" : "Task"))
+        : `#${link.targetId}`;
+      const dir = link.direction || "both";
+
+      // Header
+      const titleItem = document.createElement("div");
+      titleItem.className = "menu-item";
+      titleItem.style.opacity = "0.7";
+      titleItem.textContent = `Connection: ${sLabel} ↔ ${tLabel}`;
+      titleItem.onclick = ev => ev.stopPropagation();
+      contextMenu.appendChild(titleItem);
+
+      const sep0 = document.createElement("div");
+      sep0.className = "menu-separator";
+      contextMenu.appendChild(sep0);
+
+      function addDirItem(label, value) {
+        const item = document.createElement("div");
+        item.className = "menu-item";
+        if (dir === value) {
+          item.style.fontWeight = "600";
+        }
+        item.textContent = label;
+        item.onclick = ev => {
+          ev.stopPropagation();
+          hideContextMenu();
+          link.direction = value;
+          pushHistory();
+          render();
+        };
+        contextMenu.appendChild(item);
+      }
+
+      addDirItem(`${sLabel} → ${tLabel}`, "ab");
+      addDirItem(`${tLabel} → ${sLabel}`, "ba");
+      addDirItem("Both directions", "both");
+
+      const sep1 = document.createElement("div");
+      sep1.className = "menu-separator";
+      contextMenu.appendChild(sep1);
+
+      const del = document.createElement("div");
+      del.className = "menu-item";
+      del.textContent = "Delete connection";
+      del.onclick = ev => {
+        ev.stopPropagation();
+        hideContextMenu();
+        const idx = links.indexOf(link);
+        if (idx >= 0) {
+          links.splice(idx, 1);
+          selectedLinkIndex = null;
+          pushHistory();
+          render();
+          updateSidePanel();
+        }
+      };
+      contextMenu.appendChild(del);
+
+      showContextMenuAt(x, y);
+    }
+
+function showContextMenuForBackground(x, y) {
+      contextMenu.innerHTML = "";
+
+      const addLbl = document.createElement("div");
+      addLbl.className = "menu-item";
+      addLbl.textContent = "Add module bubble here";
+      addLbl.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        const pt = svgPointFromClient(x, y);
+        createLabelBubble(pt.x, pt.y, "New Module");
+      };
+      contextMenu.appendChild(addLbl);
+
+      const addDesc = document.createElement("div");
+      addDesc.className = "menu-item";
+      addDesc.textContent = "Add task bubble here";
+      addDesc.onclick = function (ev) {
+        ev.stopPropagation();
+        hideContextMenu();
+        const pt = svgPointFromClient(x, y);
+        createDescriptorBubble(
+          pt.x,
+          pt.y,
+          null,
+          "New Task"
+        );
+      };
+      contextMenu.appendChild(addDesc);
+
+      showContextMenuAt(x, y);
+    }
+
+    function showContextMenuAt(x, y) {
+      contextMenu.style.display = "block";
+      const menuRect = contextMenu.getBoundingClientRect();
+      let left = x;
+      let top = y;
+      if (left + menuRect.width > window.innerWidth) {
+        left = window.innerWidth - menuRect.width - 6;
+      }
+      if (top + menuRect.height > window.innerHeight) {
+        top = window.innerHeight - menuRect.height - 6;
+      }
+      contextMenu.style.left = left + "px";
+      contextMenu.style.top = top + "px";
+    }
+
+    function hideContextMenu() {
+      contextMenu.style.display = "none";
+      contextTarget = null;
+      contextTargetLinkIndex = null;
+    }
+
+    function svgPointFromClient(clientX, clientY) {
+      const rect = svg.getBoundingClientRect();
+      const sx = clientX - rect.left;
+      const sy = clientY - rect.top;
+      const worldX = (sx - panX) / scale;
+      const worldY = (sy - panY) / scale;
+      return { x: worldX, y: worldY };
+    }
+
+    // --- Edit modal ------------------------------------------------------
+
+    function openEditModal(node) {
+      editingNode = node;
+      editTitleInput.value = node.text || "";
+      editDescInput.value = node.description || "";
+      const isLabel = node.type === "label";
+      const defaultBubble = isLabel ? "#1e2c4d" : "#1b3c60";
+      const defaultText = "#f5f7fb";
+
+      editBubbleColor.dataset.hadColor = node.bubbleColor ? "1" : "0";
+      editBubbleColor.dataset.defaultColor = defaultBubble;
+      editBubbleColor.value = node.bubbleColor || defaultBubble;
+      editTextColor.value = node.textColor || defaultText;
+
+      modalBackdrop.style.display = "flex";
+      editTitleInput.focus();
+      editTitleInput.select();
+    }
+
+    function closeEditModal() {
+      modalBackdrop.style.display = "none";
+      editingNode = null;
+    }
+
+    editCancelBtn.addEventListener("click", function () {
+      closeEditModal();
+      render();
+      updateSidePanel();
+    });
+
+    editSaveBtn.addEventListener("click", function () {
+      if (!editingNode) return;
+      editingNode.text =
+        editTitleInput.value ||
+        (editingNode.type === "label" ? "Module" : "Task");
+      editingNode.description = editDescInput.value || "";
+
+      const isLabel = editingNode.type === "label";
+      const defaultBubble = isLabel ? "#1e2c4d" : "#1b3c60";
+      const chosen = editBubbleColor.value;
+      const hadColor = editBubbleColor.dataset.hadColor === "1";
+
+      if (!hadColor && chosen === defaultBubble) {
+        editingNode.bubbleColor = null;
+      } else {
+        editingNode.bubbleColor = chosen;
+      }
+
+      editingNode.textColor = editTextColor.value || null;
+
+      updateBubbleSize(editingNode);
+      closeEditModal();
+      pushHistory();
+      render();
+      updateSidePanel();
+    });
+
+    modalBackdrop.addEventListener("click", function (e) {
+      if (e.target === modalBackdrop) {
+        closeEditModal();
+        render();
+        updateSidePanel();
+      }
+    });
+
+    // --- Toolbar color tool ----------------------------------------------
+
+    toolColorBtn.addEventListener("click", () => {
+      if (!selectedNode) return;
+      const isLabel = selectedNode.type === "label";
+      const defaultBubble = isLabel ? "#1e2c4d" : "#1b3c60";
+      toolbarColorPicker.value = selectedNode.bubbleColor || defaultBubble;
+      toolbarColorPicker.click();
+    });
+
+    toolbarColorPicker.addEventListener("input", () => {
+      if (!selectedNode) return;
+      selectedNode.bubbleColor = toolbarColorPicker.value;
+      pushHistory();
+      render();
+      updateSidePanel();
+    });
+
+    // --- Keyboard --------------------------------------------------------
+
+    window.addEventListener("keydown", function (e) {
+      const active = document.activeElement;
+      if (
+        active &&
+        (active.tagName === "INPUT" || active.tagName === "TEXTAREA")
+      ) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      if (ctrl && key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+        return;
+      }
+      if (
+        (ctrl && key === "y") ||
+        (ctrl && e.shiftKey && key === "z")
+      ) {
+        e.preventDefault();
+        redo();
+        return;
+      }
+
+      if (
+        e.key === "Escape" &&
+        modalBackdrop.style.display === "flex"
+      ) {
+        closeEditModal();
+        render();
+        updateSidePanel();
+        return;
+      }
+
+      if (
+        e.key === "Escape" &&
+        modalBackdrop.style.display !== "flex"
+      ) {
+        // Clear active tools, selection, and context menu
+        setTool(null);
+        selectedNode = null;
+        selectedLinkIndex = null;
+        hideContextMenu();
+        render();
+        updateSidePanel();
+        return;
+      }
+
+      if (
+        (e.key === "Delete" || e.key === "Backspace") &&
+        modalBackdrop.style.display !== "flex"
+      ) {
+        if (selectedNode) {
+          deleteNode(selectedNode);
+          return;
+        }
+        if (
+          selectedLinkIndex !== null &&
+          selectedLinkIndex >= 0 &&
+          selectedLinkIndex < links.length
+        ) {
+          links.splice(selectedLinkIndex, 1);
+          selectedLinkIndex = null;
+          pushHistory();
+          render();
+        }
+      }
+    });
+
+    // --- Zoom & Pan ------------------------------------------------------
+
+    function zoomToFit() {
+      if (!nodes.length) return;
+      let minX = Infinity,
+        maxX = -Infinity,
+        minY = Infinity,
+        maxY = -Infinity;
+      for (const n of nodes) {
+        const r = n.r || n.baseR || 20;
+        minX = Math.min(minX, n.x - r);
+        maxX = Math.max(maxX, n.x + r);
+        minY = Math.min(minY, n.y - r);
+        maxY = Math.max(maxY, n.y + r);
+      }
+      if (!isFinite(minX) || !isFinite(minY)) return;
+
+      const rect = svg.getBoundingClientRect();
+      const viewW = rect.width;
+      const viewH = rect.height;
+
+      const padding = 40;
+      const worldW = Math.max(maxX - minX, 1);
+      const worldH = Math.max(maxY - minY, 1);
+
+      const scaleX = (viewW - padding * 2) / worldW;
+      const scaleY = (viewH - padding * 2) / worldH;
+      scale = Math.min(scaleX, scaleY, 3);
+
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+
+      panX = viewW / 2 - centerX * scale;
+      panY = viewH / 2 - centerY * scale;
+
+      updateViewportTransform();
+      render();
+    }
+
+    svg.addEventListener(
+      "wheel",
+      function (e) {
+        e.preventDefault();
+        const rect = svg.getBoundingClientRect();
+        const sx = e.clientX - rect.left;
+        const sy = e.clientY - rect.top;
+
+        const worldX = (sx - panX) / scale;
+        const worldY = (sy - panY) / scale;
+
+        const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+        scale *= zoomFactor;
+
+        panX = sx - worldX * scale;
+        panY = sy - worldY * scale;
+
+        updateViewportTransform();
+      },
+      { passive: false }
+    );
+
+    svg.addEventListener("mousedown", function (e) {
+      // Place bubbles when using tools
+      if (
+        e.button === 0 &&
+        (currentTool === "label" || currentTool === "descriptor") &&
+        (e.target === svg || e.target === viewport)
+      ) {
+        const pt = svgPointFromClient(e.clientX, e.clientY);
+        if (currentTool === "label") {
+          createLabelBubble(pt.x, pt.y, "New Module");
+        } else if (currentTool === "descriptor") {
+          createDescriptorBubble(pt.x, pt.y, null, "New Task");
+        }
+        return;
+      }
+
+      // Middle mouse: pan & double-click zoom
+      if (e.button === 1) {
+        const now = performance.now();
+        if (now - lastMiddleClickTime < 300) {
+          zoomToFit();
+        }
+        lastMiddleClickTime = now;
+
+        e.preventDefault();
+        panning = true;
+        panLastX = e.clientX;
+        panLastY = e.clientY;
+      }
+    });
+
+    window.addEventListener("mousemove", function (e) {
+      const worldPt = svgPointFromClient(e.clientX, e.clientY);
+      mouseWorld = worldPt;
+      mouseOverCanvas = true;
+
+      if (panning) {
+        const dx = e.clientX - panLastX;
+        const dy = e.clientY - panLastY;
+        panX += dx;
+        panY += dy;
+        panLastX = e.clientX;
+        panLastY = e.clientY;
+        updateViewportTransform();
+      }
+    });
+
+    svg.addEventListener("mouseleave", () => {
+      mouseOverCanvas = false;
+    });
+
+    window.addEventListener("mouseup", function (e) {
+      if (e.button === 1) {
+        panning = false;
+      }
+    });
+
+    // --- Physics & layout (with dt clamp) -------------------------------
+
+    let lastTime = performance.now();
+    function animate(time) {
+      const rawDt = (time - lastTime) / 1000;
+      const dt = Math.min(rawDt, 0.03);
+      lastTime = time;
+
+      // Advance directional pulse along connector lines (slightly faster).
+      linkPulseOffset = (linkPulseOffset + dt * 200) % 1000;
+
+      const labels = getLabelNodes();
+      const descriptors = nodes.filter(n => n.type === "descriptor");
+      const parentNodes = nodes.filter(
+        n => n.type === "label" || n.type === "descriptor"
+      );
+      // Fade in/out for nodes
+      const removalIds = new Set();
+      for (const n of nodes) {
+        if (n.fade == null) {
+          n.fade = 1;
+          n.fadeState = "normal";
+        }
+        if (n.fadeState === "appearing") {
+          n.fade += dt * 4;
+          if (n.fade >= 1) {
+            n.fade = 1;
+            n.fadeState = "normal";
+          }
+        } else if (n.fadeState === "disappearing") {
+          n.fade -= dt * 4;
+          if (n.fade <= 0) {
+            n.fade = 0;
+            removalIds.add(n.id);
+          }
+        }
+      }
+      if (removalIds.size > 0) {
+        nodes = nodes.filter(n => !removalIds.has(n.id));
+        links = links.filter(l => !removalIds.has(l.sourceId) && !removalIds.has(l.targetId));
+      }
+
+
+      // Determine which module groups should have their orbits paused.
+      // Orbiting pauses only when hovering over a module bubble.
+      // It should NOT pause just because something is selected,
+      // and it should NOT pause while using the Task tool or while dragging task bubbles.
+      const pausedModuleIds = new Set();
+      const modules = labels; // labels are the "module" bubbles
+
+      const allowPause =
+        currentTool !== "descriptor" &&
+        !(draggingNode && draggingNode.type === "descriptor");
+
+      if (allowPause) {
+        for (const mod of modules) {
+          if (mod.hovered) {
+            pausedModuleIds.add(mod.id);
+          }
+        }
+      }
+
+      const kRepel = 45000;
+      const kSpring = 3;
+      const baseSpacingFactor = 1.7;
+      const damping = 0.85;
+
+      // Recompute baseR including descriptor packing for all parent bubbles
+      for (const parent of parentNodes) {
+        parent.baseR = computeNodeBaseR(parent);
+      }
+
+      // Label repulsion
+// Label repulsion
+      for (let i = 0; i < labels.length; i++) {
+        for (let j = i + 1; j < labels.length; j++) {
+          const a = labels[i];
+          const b = labels[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+          const forceMag = kRepel / (dist * dist);
+          const fx = dirX * forceMag;
+          const fy = dirY * forceMag;
+
+          if (a !== draggingNode) {
+            a.vx += fx * dt;
+            a.vy += fy * dt;
+          }
+          if (b !== draggingNode) {
+            b.vx -= fx * dt;
+            b.vy -= fy * dt;
+          }
+        }
+      }
+
+      // Springs on links
+      for (const link of links) {
+        const a = getNodeById(link.sourceId);
+        const b = getNodeById(link.targetId);
+        if (!a || !b || a.type !== "label" || b.type !== "label") continue;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        let dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+        const dirX = dx / dist;
+        const dirY = dy / dist;
+        const restLength = (a.baseR + b.baseR) * baseSpacingFactor;
+        const springMag = kSpring * (dist - restLength);
+        const fx = dirX * springMag;
+        const fy = dirY * springMag;
+
+        if (a !== draggingNode) {
+          a.vx += fx * dt;
+          a.vy += fy * dt;
+        }
+        if (b !== draggingNode) {
+          b.vx -= fx * dt;
+          b.vy -= fy * dt;
+        }
+      }
+
+      // Integrate labels
+      for (const node of labels) {
+        if (node === draggingNode) continue;
+        node.vx *= damping;
+        node.vy *= damping;
+        node.x += node.vx * dt;
+        node.y += node.vy * dt;
+      }
+
+      // Hard separation pass so modules never visually overlap,
+      // even under heavy cross-linking.
+      const labelOverlapMargin = 24; // extra visual gap between module bubbles
+      for (let i = 0; i < labels.length; i++) {
+        for (let j = i + 1; j < labels.length; j++) {
+          const a = labels[i];
+          const b = labels[j];
+
+          let dx = b.x - a.x;
+          let dy = b.y - a.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+
+          const ra = a.r || a.baseR || 20;
+          const rb = b.r || b.baseR || 20;
+          const minDist = ra + rb + labelOverlapMargin;
+
+          if (dist < minDist) {
+            const overlap = (minDist - dist) * 0.5;
+            const ux = dx / dist;
+            const uy = dy / dist;
+
+            // Push each module away from the other, unless it's being dragged.
+            if (a !== draggingNode) {
+              a.x -= ux * overlap;
+              a.y -= uy * overlap;
+            }
+            if (b !== draggingNode) {
+              b.x += ux * overlap;
+              b.y += uy * overlap;
+            }
+          }
+        }
+      }
+
+      // Hover states
+      if (mouseOverCanvas) {
+        for (const node of labels) {
+          const dx = mouseWorld.x - node.x;
+          const dy = mouseWorld.y - node.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          node.hovered = dist <= node.r;
+        }
+        for (const node of descriptors) {
+          const dx = mouseWorld.x - node.x;
+          const dy = mouseWorld.y - node.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          node.hovered = dist <= node.r;
+        }
+      } else {
+        for (const node of labels) node.hovered = false;
+        for (const node of descriptors) node.hovered = false;
+      }
+
+      // Label breathing & hover-only expansion
+      for (const node of labels) {
+        if (!node.floatPhase)
+          node.floatPhase = Math.random() * Math.PI * 2;
+        node.floatPhase += dt * 0.8;
+        const floatScale = 1 + 0.04 * Math.sin(node.floatPhase);
+        const hoverScale = node.hovered ? 1.12 : 1.0;
+        node.r = node.baseR * floatScale * hoverScale;
+      }
+
+      // Free-floating descriptor repulsion
+      const freeDescriptors = descriptors.filter(d => !d.parentId);
+      const kDescRepel = 600;
+      for (let i = 0; i < freeDescriptors.length; i++) {
+        for (let j = i + 1; j < freeDescriptors.length; j++) {
+          const a = freeDescriptors[i];
+          const b = freeDescriptors[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+          const minDist = a.r + b.r + 8;
+          if (dist < minDist) {
+            const dirX = dx / dist;
+            const dirY = dy / dist;
+            const overlap = (minDist - dist) * 0.5;
+            a.x += dirX * overlap;
+            a.y += dirY * overlap;
+            b.x -= dirX * overlap;
+            b.y -= dirY * overlap;
+          } else {
+            const dirX = dx / dist;
+            const dirY = dy / dist;
+            const forceMag = kDescRepel / (dist * dist);
+            const fx = dirX * forceMag * dt;
+            const fy = dirY * forceMag * dt;
+            a.x += fx;
+            a.y += fy;
+            b.x -= fx;
+            b.y -= fy;
+          }
+        }
+      }
+
+      // Descriptor breathing & hover scaling
+      for (const node of descriptors) {
+        if (!node.floatPhase)
+          node.floatPhase = Math.random() * Math.PI * 2;
+        node.floatPhase += dt * 1.1;
+        const hoverScale = node.hovered ? 1.12 : 1.0;
+        const floatScale = 1 + 0.03 * Math.sin(node.floatPhase);
+        node.r = node.baseR * hoverScale * floatScale;
+      }
+
+      // Descriptors attached to labels/tasks: clockwise orbit in multi rings,
+      // with orbit "inertia" and pausing only when hovering over a module group.
+      const baseOrbitSpeed = 0.4; // radians per second
+      const orbitInertia = 5.0;   // how quickly orbit speed eases toward target
+
+      for (const parent of parentNodes) {
+        // Find the root module for this parent (closest ancestor label)
+        let rootModule = null;
+        if (parent.type === "label") {
+          rootModule = parent;
+        } else if (parent.parentId != null) {
+          let cur = parent;
+          let guard = 0;
+          while (cur && cur.parentId != null && guard < 50) {
+            const p = getNodeById(cur.parentId);
+            if (!p) break;
+            if (p.type === "label") {
+              rootModule = p;
+              break;
+            }
+            cur = p;
+            guard++;
+          }
+        }
+
+        const isPaused =
+          rootModule && pausedModuleIds.has(rootModule.id);
+
+        const layout = computeDescriptorRings(parent);
+        const rings = layout.rings;
+        if (!rings.length) continue;
+
+        if (typeof parent.childOrbitPhase !== "number") {
+          parent.childOrbitPhase = Math.random() * Math.PI * 2;
+        }
+        if (typeof parent.childOrbitVel !== "number") {
+          parent.childOrbitVel = baseOrbitSpeed;
+        }
+
+        const targetOmega = isPaused ? 0 : baseOrbitSpeed;
+        // Simple critical damping toward target angular velocity
+        parent.childOrbitVel +=
+          (targetOmega - parent.childOrbitVel) * orbitInertia * dt;
+        parent.childOrbitPhase += parent.childOrbitVel * dt;
+
+        for (const ring of rings) {
+          const n = ring.children.length;
+          if (!n) continue;
+          for (let i = 0; i < n; i++) {
+            const child = ring.children[i];
+            // Don't override the position of a bubble while it's being dragged
+            if (child === draggingNode) continue;
+            const angle =
+              parent.childOrbitPhase + (i * 2 * Math.PI) / n;
+            child.x = parent.x + Math.cos(angle) * ring.radius;
+            child.y = parent.y + Math.sin(angle) * ring.radius;
+          }
+        }
+      }
+
+      render();
+      requestAnimationFrame(animate);
+    }
+
+    // --- Init ------------------------------------------------------------
+
+    function init() {
+      const cx = (window.innerWidth / 2 - panX) / scale;
+      const cy =
+        ((window.innerHeight - 80) / 2 - panY) / scale;
+      const core = createLabelBubble(
+        cx,
+        cy,
+        "PRAXIS Core",
+        ""
+      );
+      createDescriptorBubble(
+        cx + 90,
+        cy,
+        core.id, "New Task",
+        "Brace rotation, A-Eyes, Multi-Plane, etc."
+      );
+      updateSidePanel();
+    }
+
+    init();
+    isInitializing = false;
+    undoStack.push(snapshotState());
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
